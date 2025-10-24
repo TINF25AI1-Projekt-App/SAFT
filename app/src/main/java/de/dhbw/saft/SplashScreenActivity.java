@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.core.splashscreen.SplashScreenViewProvider;
@@ -18,9 +17,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 
 		splashScreen.setOnExitAnimationListener(SplashScreenViewProvider::remove);
-
 		setContentView(R.layout.activity_splash);
-
 		new Handler().postDelayed(() -> {
 			startActivity(new Intent(this, MainActivity.class));
 			finish();
