@@ -4,10 +4,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.databinding.DataBindingUtil;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Objects;
 import de.dhbw.saft.databinding.ActivityMainBinding;
 
@@ -29,24 +33,19 @@ public class MainActivity extends AppCompatActivity {
 
 		});
 
-		cardViewF1.setOnClickListener(view -> {
-			openUrlInBrowser("https://dhbw.app/c/MA-TINF25AI1");
-		});
+		cardViewF1.setOnClickListener(view -> openUrlInBrowser("https://dhbw.app/c/MA-TINF25AI1"));
 	}
 
-	private void openUrlInBrowser(String url) {
-		if (!url.startsWith("http://") && !url.startsWith("https://")) {
-			url = "http://" + url;
-		}
-
+	private void openUrlInBrowser(@NotNull String url) {
 		Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
 		Intent chooser = Intent.createChooser(intent, getString(R.string.title_browser_chooser));
 
 		if (chooser.resolveActivity(getPackageManager()) != null) {
 			startActivity(chooser);
-		} else {
-			Toast.makeText(this, R.string.error_text_no_app_found_chooser, Toast.LENGTH_SHORT).show();
+			return;
 		}
+
+		Toast.makeText(this, R.string.error_text_no_app_found_chooser, Toast.LENGTH_SHORT).show();
 	}
 
 }
