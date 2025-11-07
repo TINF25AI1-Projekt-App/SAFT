@@ -49,6 +49,9 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.preference)
 
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
