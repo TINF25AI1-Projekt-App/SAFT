@@ -10,10 +10,10 @@
         <item>reply_all</item>
     </string-array>
     <string-array name="all_tiles_title">
-        <item>Vorlesungsplan</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
+        <item>Where2Go</item>
+        <item>Keine Ahnung</item>
+        <item>Moodle</item>
+        <item>Zimbra</item>
         <item>5</item>
         <item>6</item>
     </string-array>
