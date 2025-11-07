@@ -28,23 +28,13 @@ public class MainActivity extends AppCompatActivity {
 
 		Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.main_activity_toolbar_title);
 		toolbar.setNavigationIcon(R.drawable.baseline_home_24);
-		toolbar.setNavigationOnClickListener(v -> {});
+		toolbar.setNavigationOnClickListener(v -> {
+		});
 
 		final TileBuilder builder = new TileBuilder(this);
-		builder
-				.addTile(
-						0,
-						R.drawable.tile_where2go,
-						"https://www.google.com/maps/d/embed?mid=1xRb0uZgr4Lsyys_mqYxPgT--4JO4OpA&ehbc=2E312F&ll=49.48905226213409%2C8.480855325064853&z=14"
-				).addTile(
-					2,
-						R.drawable.tile_moodle,
-					"https://moodle.dhbw-mannheim.de/login/index.php"
-				).addTile(
-						3,
-						R.drawable.tile_zimbra,
-						"https://studgate.dhbw-mannheim.de/"
-
-				);
+		builder.addTile(0, R.drawable.tile_where2go,
+				"https://www.google.com/maps/d/embed?mid=1xRb0uZgr4Lsyys_mqYxPgT--4JO4OpA&ehbc=2E312F&ll=49.48905226213409%2C8.480855325064853&z=14")
+				.addTile(2, R.drawable.tile_moodle, "https://moodle.dhbw-mannheim.de/login/index.php")
+				.addTile(3, R.drawable.tile_zimbra, "https://studgate.dhbw-mannheim.de/");
 	}
 }
