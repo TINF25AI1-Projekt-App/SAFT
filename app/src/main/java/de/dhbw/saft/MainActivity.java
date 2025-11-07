@@ -1,28 +1,27 @@
 package de.dhbw.saft;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
 import androidx.databinding.DataBindingUtil;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Objects;
+
+import de.dhbw.saft.common.TileBuilder;
 import de.dhbw.saft.databinding.ActivityMainBinding;
+import lombok.Getter;
 
 public class MainActivity extends AppCompatActivity {
+
+	@Getter
+	private ActivityMainBinding binding;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-		CardView cardViewF1 = binding.cardViewF1;
+		binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 		Toolbar toolbar = binding.toolbar.findViewById(R.id.toolbar);
 
 		setSupportActionBar(toolbar);
@@ -30,22 +29,12 @@ public class MainActivity extends AppCompatActivity {
 		Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.main_activity_toolbar_title);
 		toolbar.setNavigationIcon(R.drawable.baseline_home_24);
 		toolbar.setNavigationOnClickListener(v -> {
-
 		});
 
-		cardViewF1.setOnClickListener(view -> openUrlInBrowser("https://dhbw.app/c/MA-TINF25AI1"));
+		final TileBuilder builder = new TileBuilder(this);
+		builder.addTile(0, R.drawable.tile_where2go,
+				"https://www.google.com/maps/d/embed?mid=1xRb0uZgr4Lsyys_mqYxPgT--4JO4OpA&ehbc=2E312F&ll=49.48905226213409%2C8.480855325064853&z=14")
+				.addTile(2, R.drawable.tile_moodle, "https://moodle.dhbw-mannheim.de/login/index.php")
+				.addTile(3, R.drawable.tile_zimbra, "https://studgate.dhbw-mannheim.de/");
 	}
-
-	private void openUrlInBrowser(@NotNull String url) {
-		Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-		Intent chooser = Intent.createChooser(intent, getString(R.string.title_browser_chooser));
-
-		if (chooser.resolveActivity(getPackageManager()) != null) {
-			startActivity(chooser);
-			return;
-		}
-
-		Toast.makeText(this, R.string.error_text_no_app_found_chooser, Toast.LENGTH_SHORT).show();
-	}
-
 }

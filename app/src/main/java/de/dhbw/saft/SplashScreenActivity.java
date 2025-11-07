@@ -11,6 +11,8 @@ import androidx.core.splashscreen.SplashScreenViewProvider;
 @SuppressLint("CustomSplashScreen")
 public class SplashScreenActivity extends AppCompatActivity {
 
+	private static final long SPLASH_DURATION = 1_500L;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
@@ -21,6 +23,6 @@ public class SplashScreenActivity extends AppCompatActivity {
 		new Handler().postDelayed(() -> {
 			startActivity(new Intent(this, MainActivity.class));
 			finish();
-		}, 2000);
+		}, SPLASH_DURATION);
 	}
 }
