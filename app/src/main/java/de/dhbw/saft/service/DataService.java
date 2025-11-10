@@ -1,5 +1,7 @@
 package de.dhbw.saft.service;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -10,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
+import de.dhbw.saft.BuildConfig;
 import de.dhbw.saft.common.DataCallback;
 import de.dhbw.saft.model.Menu;
 import de.dhbw.saft.model.Lecture;
@@ -24,8 +27,8 @@ public class DataService {
 	@Getter
 	private static List<Menu> menus = new ArrayList<>();
 
-	private static final String LECTURE_URL = "https://api.dhbw.app/rapla/lectures/{0}/events";
-	private static final String DISH_URL = "https://api.dhbw.app/mensa/MA";
+	private static final String LECTURE_URL = BuildConfig.API_ENDPOINT + "/rapla/lectures/{0}/events";
+	private static final String MENU_URL = BuildConfig.API_ENDPOINT + "/mensa/MA";
 
 	private static final OkHttpClient CLIENT = new OkHttpClient();
 	private static final Gson GSON = new Gson();
@@ -44,7 +47,7 @@ public class DataService {
 	}
 
 	public static void fetchMenus() {
-		get(DISH_URL, json -> {
+		get(MENU_URL, json -> {
 			if (json == null || json.isEmpty()) {
 				return;
 			}

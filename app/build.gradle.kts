@@ -16,6 +16,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "API_ENDPOINT", "\"${rootProject.findProperty("API_ENDPOINT")}\"")
     }
 
     buildTypes {
@@ -29,6 +30,7 @@ android {
     }
 
     buildFeatures {
+        buildConfig = true
         dataBinding = true
     }
 
