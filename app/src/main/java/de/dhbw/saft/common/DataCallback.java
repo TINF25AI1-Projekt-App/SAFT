@@ -10,9 +10,13 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+/**
+ * OkHttp {@link Callback} implementation that delivers the response body.
+ */
 @AllArgsConstructor
 public class DataCallback implements Callback {
 
+	@NonNull
 	private Consumer<String> onComplete;
 
 	@Override

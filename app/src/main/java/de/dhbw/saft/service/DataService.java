@@ -1,5 +1,7 @@
 package de.dhbw.saft.service;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -18,6 +20,9 @@ import lombok.Getter;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
+/**
+ * Service class responsible for loading and caching data from API.
+ */
 public class DataService {
 
 	@Getter
@@ -31,7 +36,13 @@ public class DataService {
 	private static final OkHttpClient CLIENT = new OkHttpClient();
 	private static final Gson GSON = new Gson();
 
-	public static void fetchLectures(String course) {
+	/**
+	 * Fetches and caches all lectures from API.
+	 *
+	 * @param course
+	 *            The course to fetch the lectures for
+	 */
+	public static void fetchLectures(@NonNull String course) {
 		final String url = MessageFormat.format(LECTURE_URL, course);
 		get(url, json -> {
 			if (json == null || json.isEmpty()) {
@@ -44,6 +55,9 @@ public class DataService {
 		});
 	}
 
+	/**
+	 * Fetches and caches all menus from API.
+	 */
 	public static void fetchMenus() {
 		get(MENU_URL, json -> {
 			if (json == null || json.isEmpty()) {
@@ -63,7 +77,15 @@ public class DataService {
 		});
 	}
 
-	private static void get(String url, Consumer<String> onComplete) {
+	/**
+	 * Requests a JSON response from a given url.
+	 *
+	 * @param url
+	 *            The url to request
+	 * @param onComplete
+	 *            Callback with the JSON response or null
+	 */
+	private static void get(@NonNull String url, @NonNull Consumer<String> onComplete) {
 		Request request = new Request.Builder().url(url).addHeader("Accept", "application/json").build();
 
 		final DataCallback callback = new DataCallback(onComplete);
