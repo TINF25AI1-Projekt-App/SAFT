@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -26,6 +27,10 @@ import java.util.function.Consumer;
 import de.dhbw.saft.MainActivity;
 import de.dhbw.saft.R;
 
+/**
+ * Utility class for dynamically creating clickable tiles in the
+ * {@link MainActivity}.
+ */
 public class TileBuilder {
 
 	private static final int TILES_CARD_GRID_COLUMNS = 2;
@@ -33,12 +38,29 @@ public class TileBuilder {
 	private final MainActivity activity;
 	private final String[] TILE_TITLES;
 
-	public TileBuilder(MainActivity activity) {
+	/**
+	 * Creates a new tile builder for {@link MainActivity}.
+	 *
+	 * @param activity
+	 *            The activity to create the tiles for
+	 */
+	public TileBuilder(@NonNull MainActivity activity) {
 		this.activity = activity;
 		TILE_TITLES = activity.getResources().getStringArray(R.array.all_tiles_title);
 	}
 
-	public TileBuilder addTile(int titleIndex, int iconResourceId, String link) {
+	/**
+	 * Creates a new clickable tile opening a certain link.
+	 *
+	 * @param titleIndex
+	 *            The tiles index used for their title
+	 * @param iconResourceId
+	 *            The icon id of the tile
+	 * @param link
+	 *            The link to open
+	 * @return The used builder
+	 */
+	public TileBuilder addTile(int titleIndex, int iconResourceId, @NonNull String link) {
 		Consumer<View> onClickAction = view -> {
 			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
 			Intent chooser = Intent.createChooser(intent, activity.getString(R.string.title_browser_chooser));
@@ -53,7 +75,18 @@ public class TileBuilder {
 		return addTile(titleIndex, iconResourceId, onClickAction);
 	}
 
-	private TileBuilder addTile(int titleIndex, int iconResourceId, Consumer<View> onClickAction) {
+	/**
+	 * Creates a new clickable tile.
+	 *
+	 * @param titleIndex
+	 *            The tiles index used for their title
+	 * @param iconResourceId
+	 *            The icon id of the tile
+	 * @param onClickAction
+	 *            The action to take
+	 * @return The used builder
+	 */
+	private TileBuilder addTile(int titleIndex, int iconResourceId, @NonNull Consumer<View> onClickAction) {
 		String cardViewID = "card_view_f" + titleIndex;
 		int cardResID = activity.getResources().getIdentifier(cardViewID, "id", activity.getPackageName());
 		CardView cardView = activity.getBinding().getRoot().findViewById(cardResID);
