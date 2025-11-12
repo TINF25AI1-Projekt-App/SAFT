@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.core.splashscreen.SplashScreenViewProvider;
 
+import de.dhbw.saft.service.DataService;
+
 @SuppressLint("CustomSplashScreen")
 public class SplashScreenActivity extends AppCompatActivity {
 
@@ -17,6 +19,10 @@ public class SplashScreenActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
 		super.onCreate(savedInstanceState);
+
+		// TODO: Use selected Course. If none is selected, don't fetch
+		DataService.fetchLectures("MA-TINF25AI1");
+		DataService.fetchMenus();
 
 		splashScreen.setOnExitAnimationListener(SplashScreenViewProvider::remove);
 		setContentView(R.layout.activity_splash);
