@@ -1,4 +1,4 @@
-package de.dhbw.saft;
+package de.dhbw.saft.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.core.splashscreen.SplashScreenViewProvider;
 
+import de.dhbw.saft.HomeActivity;
+import de.dhbw.saft.R;
 import de.dhbw.saft.service.DataService;
 
 @SuppressLint("CustomSplashScreen")

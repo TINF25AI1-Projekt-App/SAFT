@@ -5,8 +5,6 @@ import static android.view.View.VISIBLE;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,27 +22,26 @@ import androidx.gridlayout.widget.GridLayout;
 
 import java.util.function.Consumer;
 
-import de.dhbw.saft.MainActivity;
+import de.dhbw.saft.HomeActivity;
 import de.dhbw.saft.R;
 
 /**
  * Utility class for dynamically creating clickable tiles in the
- * {@link MainActivity}.
+ * {@link HomeActivity}.
  */
 public class TileBuilder {
 
 	private static final int TILES_CARD_GRID_COLUMNS = 2;
 
-	private final MainActivity activity;
+	private final HomeActivity activity;
 	private final String[] TILE_TITLES;
 
 	/**
-	 * Creates a new tile builder for {@link MainActivity}.
+	 * Creates a new tile builder for {@link HomeActivity}.
 	 *
-	 * @param activity
-	 *            The activity to create the tiles for
+	 * @param activity The activity to create the tiles for
 	 */
-	public TileBuilder(@NonNull MainActivity activity) {
+	public TileBuilder(@NonNull HomeActivity activity) {
 		this.activity = activity;
 		TILE_TITLES = activity.getResources().getStringArray(R.array.all_tiles_title);
 	}
@@ -52,13 +49,10 @@ public class TileBuilder {
 	/**
 	 * Creates a new clickable tile opening a certain link.
 	 *
-	 * @param titleIndex
-	 *            The tiles index used for their title
-	 * @param iconResourceId
-	 *            The icon id of the tile
-	 * @param link
-	 *            The link to open
-	 * @return The used builder
+	 * @param titleIndex 		The tiles index used for their title
+	 * @param iconResourceId 	The icon id of the tile
+	 * @param link				The link to open
+	 * @return 					The used builder
 	 */
 	public TileBuilder addTile(int titleIndex, int iconResourceId, @NonNull String link) {
 		Consumer<View> onClickAction = view -> {
@@ -78,13 +72,10 @@ public class TileBuilder {
 	/**
 	 * Creates a new clickable tile.
 	 *
-	 * @param titleIndex
-	 *            The tiles index used for their title
-	 * @param iconResourceId
-	 *            The icon id of the tile
-	 * @param onClickAction
-	 *            The action to take
-	 * @return The used builder
+	 * @param titleIndex		The tiles index used for their title
+	 * @param iconResourceId	The icon id of the tile
+	 * @param onClickAction		The action to take
+	 * @return 					The used builder
 	 */
 	private TileBuilder addTile(int titleIndex, int iconResourceId, @NonNull Consumer<View> onClickAction) {
 		String cardViewID = "card_view_f" + titleIndex;

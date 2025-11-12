@@ -1,22 +1,18 @@
 package de.dhbw.saft;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 
 import java.util.Objects;
-import java.util.function.Consumer;
 
 import de.dhbw.saft.common.TileBuilder;
 import de.dhbw.saft.databinding.ActivityMainBinding;
 import lombok.Getter;
 
-public class MainActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity {
 
 	@Getter
 	private ActivityMainBinding binding;
@@ -43,6 +39,5 @@ public class MainActivity extends AppCompatActivity {
 				.addTile(3, R.drawable.tile_zimbra, "https://studgate.dhbw-mannheim.de/");
 
 	}
-
 
 }

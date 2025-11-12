@@ -14,6 +14,7 @@ subprojects {
             trimTrailingWhitespace()
             endWithNewline()
             removeUnusedImports()
+            toggleOffOn("/*", "*/")
             eclipse()
         }
     }

@@ -19,4 +19,8 @@
     <string name="title_browser_chooser">Wähle einen Browser, um den Link zu öffnen:</string>
     <string name="error_text_no_app_found_chooser">Es wurde keine App für das Öffnen des Links gefunden!</string>
     <string name="main_activity_toolbar_title">My App</string>
+    <string name="title_activity_main_activitiy">MainActivitiy</string>
+    <string name="title_activity_main">MainActivity</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

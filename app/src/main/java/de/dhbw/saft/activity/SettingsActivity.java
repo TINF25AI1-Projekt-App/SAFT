@@ -1,9 +1,11 @@
-package de.dhbw.saft;
+package de.dhbw.saft.activity;
 
 import android.os.Bundle;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceFragmentCompat;
+
+import de.dhbw.saft.R;
 
 public class SettingsActivity extends AppCompatActivity {
 
