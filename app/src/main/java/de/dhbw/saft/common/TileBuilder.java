@@ -1,15 +1,23 @@
 package de.dhbw.saft.common;
 
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
+
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.gridlayout.widget.GridLayout;
 
@@ -46,24 +54,26 @@ public class TileBuilder {
 	}
 
 	private TileBuilder addTile(int titleIndex, int iconResourceId, Consumer<View> onClickAction) {
-		CardView cardView = new CardView(activity);
-		GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+		String cardViewID = "card_view_f" + titleIndex;
+		int cardResID = activity.getResources().getIdentifier(cardViewID, "id", activity.getPackageName());
+		CardView cardView = activity.getBinding().getRoot().findViewById(cardResID);
 
-		params.width = 0;
-		params.height = 0;
-		params.columnSpec = GridLayout.spec(titleIndex % TILES_CARD_GRID_COLUMNS, 1f);
-		params.rowSpec = GridLayout.spec(titleIndex / TILES_CARD_GRID_COLUMNS, 1f);
-		params.setMargins(8, 8, 8, 8);
+		String constraintID = "constraintLayout" + titleIndex;
+		int constraintResID = activity.getResources().getIdentifier(constraintID, "id", activity.getPackageName());
+		ConstraintLayout constraintLayout = activity.getBinding().getRoot().findViewById(constraintResID);
+		ConstraintSet constraintSet = new ConstraintSet();
+		constraintSet.clone(constraintLayout);
+		constraintSet.setDimensionRatio(cardView.getId(), "1:1");
 
-		cardView.setLayoutParams(params);
-		cardView.setRadius(12);
-		cardView.setCardElevation(8);
-		cardView.setUseCompatPadding(true);
+		constraintSet.applyTo(constraintLayout);
+
+		cardView.setUseCompatPadding(false);
+
+		cardView.setVisibility(VISIBLE);
 
 		LinearLayout linearLayout = new LinearLayout(activity);
 		linearLayout.setOrientation(LinearLayout.VERTICAL);
 		linearLayout.setGravity(Gravity.CENTER);
-		linearLayout.setPadding(8, 8, 8, 8);
 
 		TextView textView = new TextView(activity);
 		textView.setText(TILE_TITLES[titleIndex]);
@@ -72,17 +82,31 @@ public class TileBuilder {
 		textView.setGravity(Gravity.CENTER);
 
 		ImageView imageView = new ImageView(activity);
-		imageView.setLayoutParams(new LinearLayout.LayoutParams(64, 64));
+		imageView.setLayoutParams(new LinearLayout.LayoutParams(100, 100));
 		imageView.setImageResource(iconResourceId);
 
-		linearLayout.addView(textView);
 		linearLayout.addView(imageView);
+		linearLayout.addView(textView);
 		cardView.addView(linearLayout);
 
 		cardView.setOnClickListener(onClickAction::accept);
 
-		final GridLayout gridLayout = activity.getBinding().tilesGridLayout;
-		gridLayout.addView(cardView);
+		ViewGroup parent1 = (ViewGroup) cardView.getParent();
+		if (parent1 != null) parent1.removeView(cardView);
+		constraintLayout.addView(cardView);
+		final GridLayout gridLayout = activity.getBinding().gridLayout;
+		gridLayout.setUseDefaultMargins(false);
+		ViewGroup parent = (ViewGroup) constraintLayout.getParent();
+		if (parent != null) parent.removeView(constraintLayout);
+		gridLayout.addView(constraintLayout);
+
+
+		GridLayout.LayoutParams layoutParams = (GridLayout.LayoutParams) constraintLayout.getLayoutParams();
+		layoutParams.setMargins(layoutParams.leftMargin, 0, layoutParams.rightMargin, 0);
+		constraintLayout.setLayoutParams(layoutParams);
+
+		if (titleIndex == 1) cardView.setVisibility(INVISIBLE);
+
 		return this;
-	}
+		}
 }

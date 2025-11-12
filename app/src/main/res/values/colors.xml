@@ -7,4 +7,11 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!--Custom Colors-->
+    <color name="nav_tab_orange">#EFCCA9</color>
+    <color name="selected_menu_item_tab_orange">#F79B4B</color>
+    <color name="general_app_background">#F0F0F0</color>
+    <color name="general_card_background">#FFFFFFFF</color>
+
 </resources>
