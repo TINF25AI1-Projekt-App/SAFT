@@ -29,7 +29,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 		splashScreen.setOnExitAnimationListener(SplashScreenViewProvider::remove);
 		setContentView(R.layout.activity_splash);
 		new Handler().postDelayed(() -> {
-			startActivity(new Intent(this, MainActivity.class));
+			startActivity(new Intent(this, HomeActivity.class));
 			finish();
 		}, SPLASH_DURATION);
 	}

@@ -1,9 +1,9 @@
 package de.dhbw.saft.common;
 
-import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.view.Gravity;
 import android.view.View;
@@ -18,12 +18,14 @@ import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
-import androidx.gridlayout.widget.GridLayout;
+import androidx.fragment.app.FragmentActivity;
 
 import java.util.function.Consumer;
 
 import de.dhbw.saft.HomeActivity;
 import de.dhbw.saft.R;
+import de.dhbw.saft.databinding.FragmentHomeBinding;
+import de.dhbw.saft.fragment.HomeFragment;
 
 /**
  * Utility class for dynamically creating clickable tiles in the
@@ -33,17 +35,21 @@ public class TileBuilder {
 
 	private static final int TILES_CARD_GRID_COLUMNS = 2;
 
-	private final HomeActivity activity;
+	private final HomeFragment fragment;
+
+	private final FragmentActivity activity;
+
 	private final String[] TILE_TITLES;
 
 	/**
-	 * Creates a new tile builder for {@link HomeActivity}.
+	 * Creates a new tile builder for {@link HomeFragment}.
 	 *
-	 * @param activity The activity to create the tiles for
+	 * @param fragment The activity to create the tiles for
 	 */
-	public TileBuilder(@NonNull HomeActivity activity) {
-		this.activity = activity;
-		TILE_TITLES = activity.getResources().getStringArray(R.array.all_tiles_title);
+	public TileBuilder(@NonNull HomeFragment fragment) {
+		this.fragment = fragment;
+		activity = fragment.getActivity();
+		TILE_TITLES = fragment.getResources().getStringArray(R.array.all_tiles_title);
 	}
 
 	/**
@@ -57,7 +63,7 @@ public class TileBuilder {
 	public TileBuilder addTile(int titleIndex, int iconResourceId, @NonNull String link) {
 		Consumer<View> onClickAction = view -> {
 			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
-			Intent chooser = Intent.createChooser(intent, activity.getString(R.string.title_browser_chooser));
+			Intent chooser = Intent.createChooser(intent, fragment.getString(R.string.title_browser_chooser));
 
 			if (chooser.resolveActivity(activity.getPackageManager()) != null) {
 				activity.startActivity(chooser);
@@ -78,13 +84,17 @@ public class TileBuilder {
 	 * @return 					The used builder
 	 */
 	private TileBuilder addTile(int titleIndex, int iconResourceId, @NonNull Consumer<View> onClickAction) {
+		final String packageName = activity.getPackageName();
+		final Resources resources = fragment.getResources();
+		final FragmentHomeBinding binding = fragment.getBinding();
+
 		String cardViewID = "card_view_f" + titleIndex;
-		int cardResID = activity.getResources().getIdentifier(cardViewID, "id", activity.getPackageName());
-		CardView cardView = activity.getBinding().getRoot().findViewById(cardResID);
+		int cardResID = resources.getIdentifier(cardViewID, "id", packageName);
+		CardView cardView = binding.getRoot().findViewById(cardResID);
 
 		String constraintID = "constraintLayout" + titleIndex;
-		int constraintResID = activity.getResources().getIdentifier(constraintID, "id", activity.getPackageName());
-		ConstraintLayout constraintLayout = activity.getBinding().getRoot().findViewById(constraintResID);
+		int constraintResID = resources.getIdentifier(constraintID, "id", packageName);
+		ConstraintLayout constraintLayout = binding.getRoot().findViewById(constraintResID);
 		ConstraintSet constraintSet = new ConstraintSet();
 		constraintSet.clone(constraintLayout);
 		constraintSet.setDimensionRatio(cardView.getId(), "1:1");
@@ -116,21 +126,17 @@ public class TileBuilder {
 		cardView.setOnClickListener(onClickAction::accept);
 
 		ViewGroup parent1 = (ViewGroup) cardView.getParent();
-		if (parent1 != null) parent1.removeView(cardView);
+		if (parent1 != null)
+			parent1.removeView(cardView);
 		constraintLayout.addView(cardView);
-		final GridLayout gridLayout = activity.getBinding().gridLayout;
-		gridLayout.setUseDefaultMargins(false);
+
+		LinearLayout test = titleIndex > 1 ? binding.linearlayoutBottom : binding.linearlayoutTop;
+
 		ViewGroup parent = (ViewGroup) constraintLayout.getParent();
-		if (parent != null) parent.removeView(constraintLayout);
-		gridLayout.addView(constraintLayout);
-
-
-		GridLayout.LayoutParams layoutParams = (GridLayout.LayoutParams) constraintLayout.getLayoutParams();
-		layoutParams.setMargins(layoutParams.leftMargin, 0, layoutParams.rightMargin, 0);
-		constraintLayout.setLayoutParams(layoutParams);
-
-		if (titleIndex == 1) cardView.setVisibility(INVISIBLE);
+		if (parent != null)
+			parent.removeView(constraintLayout);
+		test.addView(constraintLayout);
 
 		return this;
-		}
+	}
 }

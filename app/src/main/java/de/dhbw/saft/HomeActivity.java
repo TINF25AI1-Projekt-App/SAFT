@@ -1,43 +1,61 @@
 package de.dhbw.saft;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 
-import java.util.Objects;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import de.dhbw.saft.common.TileBuilder;
-import de.dhbw.saft.databinding.ActivityMainBinding;
-import lombok.Getter;
+import de.dhbw.saft.databinding.ActivityHomeBinding;
+import de.dhbw.saft.fragment.HomeFragment;
 
 public class HomeActivity extends AppCompatActivity {
-
-	@Getter
-	private ActivityMainBinding binding;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-		Toolbar toolbar = binding.toolbar.findViewById(R.id.toolbar);
+		ActivityHomeBinding binding = ActivityHomeBinding.inflate(getLayoutInflater());
+		setContentView(binding.getRoot());
 
+		Toolbar toolbar = binding.toolbar.toolbar;
 		setSupportActionBar(toolbar);
 
-		Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.main_activity_toolbar_title);
+		ActionBar actionBar = getSupportActionBar();
+		if (actionBar == null) {
+			return;
+		}
+
+		actionBar.setTitle(R.string.main_activity_toolbar_title);
 		toolbar.setNavigationIcon(R.drawable.baseline_home_24);
-		toolbar.setNavigationOnClickListener(v -> {
+		toolbar.setNavigationOnClickListener(view -> {
+
 		});
 
-		final TileBuilder builder = new TileBuilder(this);
-		builder.addTile(0, R.drawable.tile_where2go,
-				"https://www.google.com/maps/d/embed?mid=1xRb0uZgr4Lsyys_mqYxPgT--4JO4OpA&ehbc=2E312F&ll=49.48905226213409%2C8.480855325064853&z=14")
-				.addTile(1, R.drawable.tile_moodle, "https://moodle.dhbw-mannheim.de/login/index.php")
-				.addTile(2, R.drawable.tile_moodle, "https://moodle.dhbw-mannheim.de/login/index.php")
-				.addTile(3, R.drawable.tile_zimbra, "https://studgate.dhbw-mannheim.de/");
+		loadFragment(new HomeFragment());
 
+		final BottomNavigationView bottomNavigation = binding.bottomNavigation;
+		bottomNavigation.setSelectedItemId(R.id.nav_home);
+		bottomNavigation.setOnItemSelectedListener(this::onClickBottomNavigation);
 	}
 
+	private boolean onClickBottomNavigation(MenuItem item) {
+		return switch (item.getItemId()) {
+			case 1000017 -> {
+				loadFragment(new HomeFragment());
+				yield true;
+			}
+			case 1000008 -> false;
+			case 1000010 -> false;
+			default -> false;
+		};
+	}
+
+	private void loadFragment(Fragment fragment) {
+		getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+	}
 }
