@@ -3,17 +3,23 @@ package de.dhbw.saft;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import de.dhbw.saft.databinding.ActivityHomeBinding;
+import de.dhbw.saft.databinding.ToolbarBinding;
 import de.dhbw.saft.fragment.HomeFragment;
+import de.dhbw.saft.fragment.MensaFragment;
+import de.dhbw.saft.fragment.PlannerFragment;
 
 public class HomeActivity extends AppCompatActivity {
+
+	private final Map<Integer, Fragment> fragments = new HashMap<>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -22,37 +28,27 @@ public class HomeActivity extends AppCompatActivity {
 		ActivityHomeBinding binding = ActivityHomeBinding.inflate(getLayoutInflater());
 		setContentView(binding.getRoot());
 
-		Toolbar toolbar = binding.toolbar.toolbar;
-		setSupportActionBar(toolbar);
+		ToolbarBinding toolbar = binding.toolbar;
+		toolbar.toolbarTitle.setText(R.string.home_fragment_title);
 
-		ActionBar actionBar = getSupportActionBar();
-		if (actionBar == null) {
-			return;
-		}
-
-		actionBar.setTitle(R.string.main_activity_toolbar_title);
-		toolbar.setNavigationIcon(R.drawable.baseline_home_24);
-		toolbar.setNavigationOnClickListener(view -> {
-
-		});
-
-		loadFragment(new HomeFragment());
+		final HomeFragment homeFragment = new HomeFragment();
+		loadFragment(homeFragment);
+		fragments.putAll(Map.of(R.id.nav_home, homeFragment, R.id.nav_mensa, new MensaFragment(), R.id.nav_planner,
+				new PlannerFragment()));
 
 		final BottomNavigationView bottomNavigation = binding.bottomNavigation;
-		bottomNavigation.setSelectedItemId(R.id.nav_home);
 		bottomNavigation.setOnItemSelectedListener(this::onClickBottomNavigation);
+		bottomNavigation.setSelectedItemId(R.id.nav_home);
 	}
 
 	private boolean onClickBottomNavigation(MenuItem item) {
-		return switch (item.getItemId()) {
-			case 1000017 -> {
-				loadFragment(new HomeFragment());
-				yield true;
-			}
-			case 1000008 -> false;
-			case 1000010 -> false;
-			default -> false;
-		};
+		final Fragment fragment = fragments.get(item.getItemId());
+		if (fragment == null) {
+			return false;
+		}
+
+		loadFragment(fragment);
+		return true;
 	}
 
 	private void loadFragment(Fragment fragment) {

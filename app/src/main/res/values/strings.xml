@@ -1,28 +1,12 @@
 <resources>
     <string name="app_name">SAFT</string>
-    <string name="title_activity_settings">SettingsActivity</string>
-
-    <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
-
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
-
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="title_browser_chooser">Wähle einen Browser, um den Link zu öffnen:</string>
     <string name="error_text_no_app_found_chooser">Es wurde keine App für das Öffnen des Links gefunden!</string>
-    <string name="main_activity_toolbar_title">My App</string>
-    <string name="title_activity_main_activitiy">MainActivitiy</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="home_fragment_title">Willkommen</string>
+    <string name="settings_fragment_title">Einstellungen</string>
+    <string name="planner_fragment_title">Vorlesungen</string>
+    <string name="mensa_fragment_title">Mensa</string>
+    <string name="app_full_name">Student • Anxiety and • Fear • Treatment</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="tab_text_1">test1</string>
-    <string name="tab_text_2">test2</string>
 </resources>

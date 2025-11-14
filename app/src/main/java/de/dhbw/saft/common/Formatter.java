@@ -96,6 +96,20 @@ public class Formatter {
 	}
 
 	/**
+	 * Parses an ISO date into a usable Date
+	 *
+	 * @param value	ISO date as String
+	 * @return 		Parsed date or null
+	 */
+	public static @Nullable Date getDate(@NonNull String value) {
+		try {
+			return INPUT_FORMAT.parse(value);
+		} catch (ParseException exception) {
+			return null;
+		}
+	}
+
+	/**
 	 * Builds a time unit with proper singular or plural.
 	 *
 	 * @param unit		The amount
@@ -120,19 +134,5 @@ public class Formatter {
 	private static @Nullable String format(@NonNull String value, @NonNull SimpleDateFormat format) {
 		Date date = getDate(value);
 		return date != null ? format.format(date) : null;
-	}
-
-	/**
-	 * Parses an ISO date into a usable Date
-	 *
-	 * @param value	ISO date as String
-	 * @return 		Parsed date or null
-	 */
-	private static @Nullable Date getDate(@NonNull String value) {
-		try {
-			return INPUT_FORMAT.parse(value);
-		} catch (ParseException exception) {
-			return null;
-		}
 	}
 }

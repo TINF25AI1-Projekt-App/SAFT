@@ -33,8 +33,6 @@ import de.dhbw.saft.fragment.HomeFragment;
  */
 public class TileBuilder {
 
-	private static final int TILES_CARD_GRID_COLUMNS = 2;
-
 	private final HomeFragment fragment;
 
 	private final FragmentActivity activity;
