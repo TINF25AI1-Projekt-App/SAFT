@@ -20,6 +20,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import java.text.MessageFormat;
 import java.util.function.Consumer;
 
 import de.dhbw.saft.HomeActivity;
@@ -34,10 +35,11 @@ import de.dhbw.saft.fragment.HomeFragment;
 public class TileBuilder {
 
 	private final HomeFragment fragment;
-
 	private final FragmentActivity activity;
-
 	private final String[] TILE_TITLES;
+
+	private static final String CARD_VIEW_ID_FORMAT = "card_view_f{0}";
+	private static final String CONSTRAINT_LAYOUT_ID_FORMAT = "constraintLayout{0}";
 
 	/**
 	 * Creates a new tile builder for {@link HomeFragment}.
@@ -82,32 +84,7 @@ public class TileBuilder {
 	 * @return 					The used builder
 	 */
 	private TileBuilder addTile(int titleIndex, int iconResourceId, @NonNull Consumer<View> onClickAction) {
-		final String packageName = activity.getPackageName();
-		final Resources resources = fragment.getResources();
-		final FragmentHomeBinding binding = fragment.getBinding();
-
-		String cardViewID = "card_view_f" + titleIndex;
-		int cardResID = resources.getIdentifier(cardViewID, "id", packageName);
-		CardView cardView = binding.getRoot().findViewById(cardResID);
-
-		String constraintID = "constraintLayout" + titleIndex;
-		int constraintResID = resources.getIdentifier(constraintID, "id", packageName);
-		ConstraintLayout constraintLayout = binding.getRoot().findViewById(constraintResID);
-		ConstraintSet constraintSet = new ConstraintSet();
-		constraintSet.clone(constraintLayout);
-		constraintSet.setDimensionRatio(cardView.getId(), "1:1");
-
-		constraintSet.applyTo(constraintLayout);
-
-		cardView.setUseCompatPadding(false);
-
-		cardView.setVisibility(VISIBLE);
-
-		LinearLayout linearLayout = new LinearLayout(activity);
-		linearLayout.setOrientation(LinearLayout.VERTICAL);
-		linearLayout.setGravity(Gravity.CENTER);
-
-		TextView textView = new TextView(activity);
+		final TextView textView = new TextView(activity);
 		textView.setText(TILE_TITLES[titleIndex]);
 		textView.setTextSize(24);
 		textView.setTextColor(ContextCompat.getColor(activity, android.R.color.black));
@@ -117,24 +94,46 @@ public class TileBuilder {
 		imageView.setLayoutParams(new LinearLayout.LayoutParams(100, 100));
 		imageView.setImageResource(iconResourceId);
 
+		final LinearLayout linearLayout = new LinearLayout(activity);
+		linearLayout.setOrientation(LinearLayout.VERTICAL);
+		linearLayout.setGravity(Gravity.CENTER);
 		linearLayout.addView(imageView);
 		linearLayout.addView(textView);
-		cardView.addView(linearLayout);
 
+		final FragmentHomeBinding binding = fragment.getBinding();
+		final Resources resources = fragment.getResources();
+		final String packageName = activity.getPackageName();
+
+		final String cardViewId = MessageFormat.format(CARD_VIEW_ID_FORMAT, titleIndex);
+		final int cardResourceId = resources.getIdentifier(cardViewId, "id", packageName);
+		final CardView cardView = binding.getRoot().findViewById(cardResourceId);
+		cardView.setUseCompatPadding(false);
+		cardView.setVisibility(VISIBLE);
+		cardView.addView(linearLayout);
 		cardView.setOnClickListener(onClickAction::accept);
 
-		ViewGroup parent1 = (ViewGroup) cardView.getParent();
-		if (parent1 != null)
-			parent1.removeView(cardView);
+		final ViewGroup cardViewParent = (ViewGroup) cardView.getParent();
+		if (cardViewParent != null) {
+			cardViewParent.removeView(cardView);
+		}
+
+		final String constraintLayoutId = MessageFormat.format(CONSTRAINT_LAYOUT_ID_FORMAT, titleIndex);
+		final int constraintResourceId = resources.getIdentifier(constraintLayoutId, "id", packageName);
+		final ConstraintLayout constraintLayout = binding.getRoot().findViewById(constraintResourceId);
 		constraintLayout.addView(cardView);
 
-		LinearLayout test = titleIndex > 1 ? binding.linearlayoutBottom : binding.linearlayoutTop;
+		final ViewGroup constraintLayoutParent = (ViewGroup) constraintLayout.getParent();
+		if (constraintLayoutParent != null) {
+			constraintLayoutParent.removeView(constraintLayout);
+		}
 
-		ViewGroup parent = (ViewGroup) constraintLayout.getParent();
-		if (parent != null)
-			parent.removeView(constraintLayout);
-		test.addView(constraintLayout);
+		final ConstraintSet constraintSet = new ConstraintSet();
+		constraintSet.clone(constraintLayout);
+		constraintSet.setDimensionRatio(cardView.getId(), "1:1");
+		constraintSet.applyTo(constraintLayout);
 
+		final LinearLayout cardRow = titleIndex > 1 ? binding.linearlayoutBottom : binding.linearlayoutTop;
+		cardRow.addView(constraintLayout);
 		return this;
 	}
 }

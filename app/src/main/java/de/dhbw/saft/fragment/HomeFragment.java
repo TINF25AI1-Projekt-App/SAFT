@@ -15,6 +15,7 @@ import java.util.Date;
 
 import de.dhbw.saft.R;
 import de.dhbw.saft.common.Formatter;
+import de.dhbw.saft.common.LectureFeed;
 import de.dhbw.saft.common.TileBuilder;
 import de.dhbw.saft.databinding.FragmentHomeBinding;
 import de.dhbw.saft.model.Lecture;
@@ -39,7 +40,11 @@ public class HomeFragment extends Fragment {
 				.addTile(2, R.drawable.tile_moodle, "https://moodle.dhbw-mannheim.de/login/index.php")
 				.addTile(3, R.drawable.tile_zimbra, "https://studgate.dhbw-mannheim.de/");
 
-		displayLecture();
+		LectureFeed feed = getLectureFeed();
+		binding.cardViewHeader.setText(feed.header());
+		binding.cardViewDescription.setText(feed.description());
+		binding.cardViewHighlighted.setText(feed.highlighted());
+		binding.cardViewIcon.setImageResource(feed.iconResource());
 
 		return binding.getRoot();
 	}
@@ -50,25 +55,40 @@ public class HomeFragment extends Fragment {
 		binding = null;
 	}
 
-	private void displayLecture() {
+	/**
+	 * Creates a {@link LectureFeed} containing all information required
+	 * to display the current lecture status.
+	 *
+	 * @return Information to display
+	 */
+	private LectureFeed getLectureFeed() {
 		final long timestamp = System.currentTimeMillis();
 		final Lecture currentLecture = getCurrentLecture(timestamp);
 		if (currentLecture != null) {
-			final long end = Formatter.getDateMillis(currentLecture.end());
-			// TODO: add ending soon
-			return;
+			final String start = Formatter.formatTime(currentLecture.start());
+			final String end = Formatter.formatTime(currentLecture.end());
+			final String description = String.join(", ", currentLecture.rooms()) + "\n" + start + " - " + end;
+			return new LectureFeed(currentLecture.getDeclarativeName(), description, null,
+					R.drawable.navigation_planner);
 		}
 
 		final Lecture nextLecture = getNextLecture(timestamp);
 		if (nextLecture == null || !isToday(nextLecture)) {
-			// TODO: add no course today
-			return;
+			return new LectureFeed("Keine Vorlesungen", "Heute stehen keine Vorlesungen an", "Bis morgen!",
+					R.drawable.outline_bedtime_24);
 		}
 
-		final long start = Formatter.getDateMillis(nextLecture.start());
-		// TODO: add next course
+		final long start = Formatter.getDateMillis(nextLecture.start()) - System.currentTimeMillis();
+		return new LectureFeed("Keine Vorlesung", "Deine nächste Vorlesung beginnt in", Formatter.formatDuration(start),
+				R.drawable.outline_bedtime_24);
 	}
 
+	/**
+	 * Gets the current {@link Lecture}
+	 *
+	 * @param timestamp Timestamp of now
+	 * @return			Current lecture or null
+	 */
 	private @Nullable Lecture getCurrentLecture(long timestamp) {
 		for (Lecture lecture : DataService.getLectures()) {
 			final long start = Formatter.getDateMillis(lecture.start());
@@ -81,6 +101,12 @@ public class HomeFragment extends Fragment {
 		return null;
 	}
 
+	/**
+	 * Gets the next {@link Lecture}.
+	 *
+	 * @param timestamp	Timestamp of now
+	 * @return			Next lecture or null
+	 */
 	private @Nullable Lecture getNextLecture(long timestamp) {
 		for (Lecture lecture : DataService.getLectures()) {
 			final long start = Formatter.getDateMillis(lecture.start());
@@ -92,6 +118,12 @@ public class HomeFragment extends Fragment {
 		return null;
 	}
 
+	/**
+	 * Checks whether the given lecture starts on the current calendar day.
+	 *
+	 * @param lecture	The lecture
+	 * @return			true if the lecture starts today, false if otherwise
+	 */
 	private boolean isToday(@NonNull Lecture lecture) {
 		final Date lectureStartDate = Formatter.getDate(lecture.start());
 		if (lectureStartDate == null) {
