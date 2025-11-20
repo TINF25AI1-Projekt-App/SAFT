@@ -36,9 +36,8 @@ public class Formatter {
 	/**
 	 * Converts an ISO date into millis.
 	 *
-	 * @param value
-	 *            ISO date as String
-	 * @return Date as millis
+	 * @param value	ISO date as String
+	 * @return 		Date as millis
 	 */
 	public static long getDateMillis(@NonNull String value) {
 		Date date = getDate(value);
@@ -48,9 +47,8 @@ public class Formatter {
 	/**
 	 * Formats an ISO date into a readable german date.
 	 *
-	 * @param value
-	 *            ISO date as String
-	 * @return Formatted date
+	 * @param value	ISO date as String
+	 * @return 		Formatted date
 	 */
 	public static @Nullable String formatDate(@NonNull String value) {
 		return format(value, DATE_FORMAT);
@@ -59,9 +57,8 @@ public class Formatter {
 	/**
 	 * Formats an ISO date into a day time.
 	 *
-	 * @param value
-	 *            ISO date as String
-	 * @return Formatted day time
+	 * @param value	ISO date as String
+	 * @return 		Formatted day time
 	 */
 	public static @Nullable String formatTime(@NonNull String value) {
 		return format(value, TIME_FORMAT);
@@ -70,9 +67,8 @@ public class Formatter {
 	/**
 	 * Formats millis into a readable duration.
 	 *
-	 * @param millis
-	 *            Duration in millis
-	 * @return Formatted duration
+	 * @param millis	Duration in millis
+	 * @return 			Formatted duration
 	 */
 	public static String formatDuration(long millis) {
 		if (millis < SECOND) {
@@ -100,15 +96,26 @@ public class Formatter {
 	}
 
 	/**
+	 * Parses an ISO date into a usable Date
+	 *
+	 * @param value	ISO date as String
+	 * @return 		Parsed date or null
+	 */
+	public static @Nullable Date getDate(@NonNull String value) {
+		try {
+			return INPUT_FORMAT.parse(value);
+		} catch (ParseException exception) {
+			return null;
+		}
+	}
+
+	/**
 	 * Builds a time unit with proper singular or plural.
 	 *
-	 * @param unit
-	 *            The amount
-	 * @param singular
-	 *            Singular time form
-	 * @param plural
-	 *            Plural time form
-	 * @return Formatted time unit or null if unit is 0
+	 * @param unit		The amount
+	 * @param singular	Singular time form
+	 * @param plural	Plural time form
+	 * @return 			Formatted time unit or null if unit is 0
 	 */
 	private static @Nullable String validate(long unit, @NonNull String singular, @NonNull String plural) {
 		if (unit < 1) {
@@ -120,29 +127,12 @@ public class Formatter {
 	/**
 	 * Formats an ISO date using a date format.
 	 *
-	 * @param value
-	 *            ISO date as String
-	 * @param format
-	 *            The date format to be used
-	 * @return Formatted ISO date or null
+	 * @param value		ISO date as String
+	 * @param format	The date format to be used
+	 * @return 			Formatted ISO date or null
 	 */
 	private static @Nullable String format(@NonNull String value, @NonNull SimpleDateFormat format) {
 		Date date = getDate(value);
 		return date != null ? format.format(date) : null;
-	}
-
-	/**
-	 * Parses an ISO date into a usable Date
-	 *
-	 * @param value
-	 *            ISO date as String
-	 * @return Parsed date or null
-	 */
-	private static @Nullable Date getDate(@NonNull String value) {
-		try {
-			return INPUT_FORMAT.parse(value);
-		} catch (ParseException exception) {
-			return null;
-		}
 	}
 }

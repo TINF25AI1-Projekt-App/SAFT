@@ -39,8 +39,7 @@ public class DataService {
 	/**
 	 * Fetches and caches all lectures from API.
 	 *
-	 * @param course
-	 *            The course to fetch the lectures for
+	 * @param course The course to fetch the lectures for
 	 */
 	public static void fetchLectures(@NonNull String course) {
 		final String url = MessageFormat.format(LECTURE_URL, course);
@@ -80,10 +79,8 @@ public class DataService {
 	/**
 	 * Requests a JSON response from a given url.
 	 *
-	 * @param url
-	 *            The url to request
-	 * @param onComplete
-	 *            Callback with the JSON response or null
+	 * @param url			The url to request
+	 * @param onComplete	Callback with the JSON response or null
 	 */
 	private static void get(@NonNull String url, @NonNull Consumer<String> onComplete) {
 		Request request = new Request.Builder().url(url).addHeader("Accept", "application/json").build();
