@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 import de.dhbw.saft.R;
+import lombok.NoArgsConstructor;
 import de.dhbw.saft.adapter.PlannerCardAdapter;
 import de.dhbw.saft.common.Formatter;
 import de.dhbw.saft.model.HeaderEntry;
@@ -25,17 +26,8 @@ import de.dhbw.saft.model.PlannerCardItem;
 import de.dhbw.saft.model.ScheduleEntry;
 import de.dhbw.saft.service.DataService;
 
+@NoArgsConstructor
 public class PlannerFragment extends Fragment {
-
-	public PlannerFragment() {
-		// Required empty public constructor
-	}
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
