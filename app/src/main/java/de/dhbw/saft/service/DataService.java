@@ -83,9 +83,11 @@ public class DataService {
 	 * @param onComplete	Callback with the JSON response or null
 	 */
 	private static void get(@NonNull String url, @NonNull Consumer<String> onComplete) {
-		Request request = new Request.Builder().url(url).addHeader("Accept", "application/json").build();
-
-		final DataCallback callback = new DataCallback(onComplete);
-		CLIENT.newCall(request).enqueue(callback);
+		try {
+			Request request = new Request.Builder().url(url).addHeader("Accept", "application/json").build();
+			final DataCallback callback = new DataCallback(onComplete);
+			CLIENT.newCall(request).enqueue(callback);
+		} catch (IllegalArgumentException ignored) {
+		}
 	}
 }
