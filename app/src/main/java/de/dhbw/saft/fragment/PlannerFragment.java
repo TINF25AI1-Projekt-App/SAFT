@@ -18,12 +18,12 @@ import java.util.Set;
 
 import de.dhbw.saft.R;
 import lombok.NoArgsConstructor;
-import de.dhbw.saft.adapter.PlannerCardAdapter;
+import de.dhbw.saft.adapter.LectureCardAdapter;
 import de.dhbw.saft.common.Formatter;
-import de.dhbw.saft.model.HeaderEntry;
+import de.dhbw.saft.common.Header;
 import de.dhbw.saft.model.Lecture;
-import de.dhbw.saft.model.PlannerCardItem;
-import de.dhbw.saft.model.ScheduleEntry;
+import de.dhbw.saft.common.LectureCard;
+import de.dhbw.saft.common.Entry;
 import de.dhbw.saft.service.DataService;
 
 @NoArgsConstructor
@@ -36,22 +36,22 @@ public class PlannerFragment extends Fragment {
 		final RecyclerView recyclerView = root.findViewById(R.id.recycler_view);
 
 		final List<Lecture> lectures = DataService.getLectures();
-		List<ScheduleEntry> dates = new ArrayList<>();
+		List<Entry> dates = new ArrayList<>();
 		Set<String> addedDates = new HashSet<>();
 
 		for (Lecture lecture : lectures) {
-			PlannerCardItem item = new PlannerCardItem(lecture.name(), lecture.type(), lecture.rooms(), lecture.start(),
+			LectureCard item = new LectureCard(lecture.name(), lecture.type(), lecture.rooms(), lecture.start(),
 					lecture.end());
-			String date = Formatter.formatDate(item.getStart());
+			String date = Formatter.formatDate(item.start());
 
 			if (date != null && !addedDates.contains(date)) {
-				dates.add(new HeaderEntry(date));
+				dates.add(new Header(date));
 				addedDates.add(date);
 			}
 			dates.add(item);
 		}
 
-		PlannerCardAdapter adapter = new PlannerCardAdapter(dates);
+		LectureCardAdapter adapter = new LectureCardAdapter(dates);
 		recyclerView.setLayoutManager(new LinearLayoutManager(mainActivity));
 		recyclerView.setAdapter(adapter);
 		return root;
