@@ -16,6 +16,7 @@ import de.dhbw.saft.databinding.ToolbarBinding;
 import de.dhbw.saft.fragment.HomeFragment;
 import de.dhbw.saft.fragment.MensaFragment;
 import de.dhbw.saft.fragment.PlannerFragment;
+import de.dhbw.saft.fragment.SettingsFragment;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -30,6 +31,7 @@ public class HomeActivity extends AppCompatActivity {
 
 		ToolbarBinding toolbar = binding.toolbar;
 		toolbar.toolbarTitle.setText(R.string.home_fragment_title);
+        toolbar.toolbarButton.setOnClickListener(l ->loadFragment(new SettingsFragment()));
 
 		final HomeFragment homeFragment = new HomeFragment();
 		loadFragment(homeFragment);
