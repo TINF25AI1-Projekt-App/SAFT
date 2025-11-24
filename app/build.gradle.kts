@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.androidx.preference)
     implementation(libs.gson)
     implementation(libs.okhttp)
+    implementation(libs.androidx.recyclerview)
 
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
