@@ -1,5 +1,6 @@
 package de.dhbw.saft.adapter;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +48,8 @@ public class LectureCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 		};
 	}
 
-	@Override
+    @Override
+	@SuppressLint("SetTextI18n")
 	public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
 		if (viewHolder instanceof HeaderViewHolder holder) {
 			Header header = (Header) items.get(position);
