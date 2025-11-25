@@ -1,30 +1,29 @@
 package de.dhbw.saft.adapter;
 
 import android.annotation.SuppressLint;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
 import de.dhbw.saft.R;
-import de.dhbw.saft.common.Formatter;
-import de.dhbw.saft.common.Header;
-import de.dhbw.saft.model.Lecture;
-import de.dhbw.saft.common.LectureCard;
 import de.dhbw.saft.common.Entry;
+import de.dhbw.saft.common.Header;
+import de.dhbw.saft.model.Menu;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class LectureCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class MensaCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 	private final List<Entry> items;
-
+	List<Menu.Dish> dishes;
 	@NonNull
 	@Override
 	public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -40,7 +39,7 @@ public class LectureCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 				yield new HeaderViewHolder(view);
 			}
 			case ITEM -> {
-				final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.planner_item_card, parent,
+				final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.mensa_item_card, parent,
 						false);
 				yield new CardViewHolder(view);
 			}
@@ -60,12 +59,29 @@ public class LectureCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 			return;
 		}
 
-		LectureCard item = (LectureCard) items.get(position);
-		holder.textLectureTitle.setText(item.name());
-		holder.textPlannerTime.setText(Formatter.formatTime(item.start()) + " - " + Formatter.formatTime(item.end()));
-		holder.textPlannerRooms.setText(String.join(", ", item.rooms()));
-		holder.imageViewType.setImageResource(
-				item.type() == Lecture.Type.PRESENCE ? R.drawable.planner_room : R.drawable.planner_online);
+		// MensaCard item = (MensaCard) items.get(position);
+
+		if (dishes != null && !dishes.isEmpty()) {
+			holder.textDishTitle.setText(dishes.get(position).getDeclarativeName());
+			holder.textIngredients.setText(dishes.get(position).getDescription());
+			holder.textPrice.setText("" + dishes.get(position).price());
+			Drawable drawable = Drawable.createFromPath(dishes.get(position).image());
+			holder.imageViewDish.setForeground(drawable);
+		}
+		/*if (item.mainCourses() != null && item.mainCourses().length > 0) {
+			Menu.Dish mainCourse = item.mainCourses()[0];
+			holder.textDishTitle.setText(mainCourse.getDeclarativeName());
+			holder.textIngredients.setText(mainCourse.getDescription());
+			holder.textPrice.setText("" + mainCourse.price());
+			Drawable drawable = Drawable.createFromPath(mainCourse.image());
+			if (drawable != null) {
+				holder.imageViewDish.setForeground(drawable);
+			} else {
+				// handle missing drawable, e.g. clear foreground or set a placeholder
+				holder.imageViewDish.setForeground(null);
+			}
+		}*/
+
 	}
 
 	@Override
@@ -80,16 +96,16 @@ public class LectureCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
 	private static class CardViewHolder extends RecyclerView.ViewHolder {
 		// final CardView cardView;
-		final ImageView imageViewType;
-		final TextView textLectureTitle, textPlannerTime, textPlannerRooms;
+		final CardView imageViewDish;
+		final TextView textDishTitle, textIngredients, textPrice;
 
 		public CardViewHolder(View itemView) {
 			super(itemView);
 			// cardView = itemView.findViewById(R.id.card_view);
-			textLectureTitle = itemView.findViewById(R.id.text_lecture_title);
-			textPlannerTime = itemView.findViewById(R.id.text_planner_time);
-			textPlannerRooms = itemView.findViewById(R.id.text_lecture_type);
-			imageViewType = itemView.findViewById(R.id.imageView_lecture_type);
+			textDishTitle = itemView.findViewById(R.id.text_mensa_dish_title);
+			textIngredients = itemView.findViewById(R.id.text_mensa_ingredients);
+			textPrice = itemView.findViewById(R.id.text_mensa_price);
+			imageViewDish = itemView.findViewById(R.id.card_view_dish_image);
 		}
 	}
 
