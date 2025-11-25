@@ -12,18 +12,18 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+import java.util.Locale;
 
 import de.dhbw.saft.R;
+import de.dhbw.saft.common.DishCard;
 import de.dhbw.saft.common.Entry;
 import de.dhbw.saft.common.Header;
-import de.dhbw.saft.model.Menu;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class MensaCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 	private final List<Entry> items;
-	List<Menu.Dish> dishes;
 	@NonNull
 	@Override
 	public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -59,28 +59,12 @@ public class MensaCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 			return;
 		}
 
-		// MensaCard item = (MensaCard) items.get(position);
-
-		if (dishes != null && !dishes.isEmpty()) {
-			holder.textDishTitle.setText(dishes.get(position).getDeclarativeName());
-			holder.textIngredients.setText(dishes.get(position).getDescription());
-			holder.textPrice.setText("" + dishes.get(position).price());
-			Drawable drawable = Drawable.createFromPath(dishes.get(position).image());
-			holder.imageViewDish.setForeground(drawable);
-		}
-		/*if (item.mainCourses() != null && item.mainCourses().length > 0) {
-			Menu.Dish mainCourse = item.mainCourses()[0];
-			holder.textDishTitle.setText(mainCourse.getDeclarativeName());
-			holder.textIngredients.setText(mainCourse.getDescription());
-			holder.textPrice.setText("" + mainCourse.price());
-			Drawable drawable = Drawable.createFromPath(mainCourse.image());
-			if (drawable != null) {
-				holder.imageViewDish.setForeground(drawable);
-			} else {
-				// handle missing drawable, e.g. clear foreground or set a placeholder
-				holder.imageViewDish.setForeground(null);
-			}
-		}*/
+		DishCard item = (DishCard) items.get(position);
+		holder.textDishTitle.setText(item.name());
+		holder.textIngredients.setText(item.description());
+		holder.textPrice.setText(String.format(Locale.getDefault(), "%,.2f €", item.price()));
+		Drawable drawable = Drawable.createFromPath(item.image());
+		holder.imageViewDish.setForeground(drawable);
 
 	}
 
