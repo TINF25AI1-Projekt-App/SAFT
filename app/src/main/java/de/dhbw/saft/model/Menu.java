@@ -23,7 +23,12 @@ public record Menu(String date, Dish[] mainCourses, Dish[] desserts) {
 		 * @return The actual name
 		 */
 		public @NonNull String getDeclarativeName() {
-			return name.split(",")[0].trim();
+			final String base = name.split(",")[0].trim();
+			if (base.isEmpty()) {
+				return base;
+			}
+
+			return Character.toUpperCase(base.charAt(0)) + base.substring(1);
 		}
 
 		/**
@@ -36,7 +41,12 @@ public record Menu(String date, Dish[] mainCourses, Dish[] desserts) {
 				return null;
 			}
 
-			return name.split(",", 2)[1].trim();
+			final String base = name.split(",", 2)[1].trim();
+			if (base.isEmpty()) {
+				return null;
+			}
+
+			return Character.toUpperCase(base.charAt(0)) + base.substring(1);
 		}
 
 		@Override
