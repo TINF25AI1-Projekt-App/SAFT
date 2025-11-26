@@ -3,7 +3,7 @@ package de.dhbw.saft.common;
 import androidx.annotation.NonNull;
 
 import java.io.IOException;
-import java.util.function.Consumer;
+import java.util.concurrent.CompletableFuture;
 
 import lombok.AllArgsConstructor;
 import okhttp3.Call;
@@ -17,20 +17,20 @@ import okhttp3.Response;
 public class DataCallback implements Callback {
 
 	@NonNull
-	private Consumer<String> onComplete;
+	private CompletableFuture<String> onComplete;
 
 	@Override
 	public void onFailure(@NonNull Call call, @NonNull IOException e) {
-		onComplete.accept(null);
+		onComplete.completeExceptionally(new Throwable("Request Failed.", e));
 	}
 
 	@Override
 	public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
 		try (response) {
 			if (response.isSuccessful()) {
-				onComplete.accept(response.body().string());
+				onComplete.complete(response.body().string());
 			} else {
-				onComplete.accept(null);
+				onComplete.complete(null);
 			}
 		}
 	}
