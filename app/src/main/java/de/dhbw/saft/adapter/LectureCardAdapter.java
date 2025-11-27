@@ -48,7 +48,7 @@ public class LectureCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 		};
 	}
 
-    @Override
+	@Override
 	@SuppressLint("SetTextI18n")
 	public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
 		if (viewHolder instanceof HeaderViewHolder holder) {
