@@ -11,14 +11,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import de.dhbw.saft.BuildConfig;
-import de.dhbw.saft.common.DataCallback;
 import de.dhbw.saft.model.Menu;
 import de.dhbw.saft.model.Lecture;
+import de.dhbw.saft.parser.ResponseParser;
+import de.dhbw.saft.parser.StringParser;
 import lombok.Getter;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 /**
  * Service class responsible for loading and caching data from API.
@@ -34,6 +39,7 @@ public class DataService {
 	private static final String MENU_URL = BuildConfig.API_ENDPOINT + "/mensa/MA";
 
 	private static final OkHttpClient CLIENT = new OkHttpClient();
+	private static final ExecutorService IO_EXECUTOR = Executors.newFixedThreadPool(4);
 	private static final Gson GSON = new Gson();
 
 	/**
@@ -46,7 +52,7 @@ public class DataService {
 	public static CompletableFuture<Void> fetchLectures(@NonNull String course) {
 		final String url = MessageFormat.format(LECTURE_URL, course);
 		try {
-			return get(url).thenAccept(json -> {
+			return get(url, new StringParser()).thenAccept(json -> {
 				if (json == null || json.isEmpty()) {
 					return;
 				}
@@ -62,10 +68,12 @@ public class DataService {
 
 	/**
 	 * Fetches and caches all menus from API.
+	 * @return 		 A {@link CompletableFuture<Void>} which is completed once
+	 * 				 all menus have been fetched.
 	 */
-	public static void fetchMenus() {
+	public static CompletableFuture<Void> fetchMenus() {
 		try {
-			get(MENU_URL).thenAccept(json -> {
+			return get(MENU_URL, new StringParser()).thenAccept(json -> {
 				if (json == null || json.isEmpty()) {
 					return;
 				}
@@ -81,7 +89,8 @@ public class DataService {
 				Menu[] menuArray = GSON.fromJson(menusArray, Menu[].class);
 				menus.addAll(Arrays.asList(menuArray));
 			});
-		} catch (IllegalArgumentException ignored) {
+		} catch (IllegalArgumentException exception) {
+			return CompletableFuture.completedFuture(null);
 		}
 	}
 
@@ -94,12 +103,23 @@ public class DataService {
 	 *
 	 * @throws 		IllegalArgumentException If the provided URL is invalid
 	 */
-	private static CompletableFuture<String> get(@NonNull String url) throws IllegalArgumentException {
-		final CompletableFuture<String> onComplete = new CompletableFuture<>();
+	private static <T> CompletableFuture<T> get(@NonNull String url, @NonNull ResponseParser<T> parser) {
+		return CompletableFuture.supplyAsync(() -> {
+			try {
+				Request request = new Request.Builder().url(url).addHeader("Accept", "application/json").build();
 
-		final Request request = new Request.Builder().url(url).addHeader("Accept", "application/json").build();
-		final DataCallback callback = new DataCallback(onComplete);
-		CLIENT.newCall(request).enqueue(callback);
-		return onComplete;
+				try (Response response = CLIENT.newCall(request).execute()) {
+					if (!response.isSuccessful()) {
+						return null;
+					}
+
+					final ResponseBody body = response.body();
+					return parser.parse(body);
+				}
+			} catch (Exception exception) {
+				return null;
+			}
+		}, IO_EXECUTOR);
 	}
+
 }

@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.core.splashscreen.SplashScreenViewProvider;
 
+import java.util.concurrent.CompletableFuture;
+
 import de.dhbw.saft.HomeActivity;
 import de.dhbw.saft.R;
 import de.dhbw.saft.service.DataService;
@@ -22,9 +24,8 @@ public class SplashScreenActivity extends AppCompatActivity {
 		splashScreen.setOnExitAnimationListener(SplashScreenViewProvider::remove);
 		setContentView(R.layout.activity_splash);
 
-		DataService.fetchMenus();
 		// TODO: Use selected Course. If none is selected, don't fetch
-		DataService.fetchLectures("MA-TINF25AI1").thenRun(() -> {
+		CompletableFuture.allOf(DataService.fetchLectures("MA-TINF25AI1"), DataService.fetchMenus()).thenRun(() -> {
 			startActivity(new Intent(this, HomeActivity.class));
 			finish();
 		});
