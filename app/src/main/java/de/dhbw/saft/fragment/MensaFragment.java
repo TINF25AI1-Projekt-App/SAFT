@@ -22,7 +22,6 @@ import de.dhbw.saft.R;
 import de.dhbw.saft.adapter.MensaCardAdapter;
 import de.dhbw.saft.common.Entry;
 import de.dhbw.saft.common.Formatter;
-import de.dhbw.saft.common.DishCard;
 import de.dhbw.saft.common.Header;
 import de.dhbw.saft.model.Menu;
 import de.dhbw.saft.service.DataService;
@@ -38,29 +37,22 @@ public class MensaFragment extends Fragment {
 		final RecyclerView recyclerView = root.findViewById(R.id.recycler_view);
 
 		final List<Menu> menus = DataService.getMenus();
-		List<Entry> dates = new ArrayList<>();
-		Set<String> addedDates = new HashSet<>();
+		final List<Entry> entries = new ArrayList<>();
+		final Set<String> dates = new HashSet<>();
 
 		for (Menu menu : menus) {
-			String date = Formatter.formatDate(menu.date());
-
-			if (date != null && !addedDates.contains(date)
-					&& (menu.mainCourses().length > 0 || menu.desserts().length > 0)) {
-				dates.add(new Header(date));
-				addedDates.add(date);
+			final String date = Formatter.formatDate(menu.date());
+			final Menu.Dish[] mainCourses = menu.mainCourses();
+			final Menu.Dish[] desserts = menu.desserts();
+			if (date != null && dates.add(date) && (mainCourses.length > 0 || desserts.length > 0)) {
+				entries.add(new Header(date));
 			}
 
-			List<Menu.Dish> dishes = Stream.concat(Arrays.stream(menu.mainCourses()), Arrays.stream(menu.desserts()))
-					.toList();
-
-			for (Menu.Dish dish : dishes) {
-				DishCard item2 = new DishCard(dish.getDeclarativeName(), dish.price(), dish.image(),
-						dish.getDescription());
-				dates.add(item2);
-			}
+			List<Menu.Dish> dishes = Stream.concat(Arrays.stream(mainCourses), Arrays.stream(desserts)).toList();
+			entries.addAll(dishes);
 		}
 
-		MensaCardAdapter adapter = new MensaCardAdapter(dates);
+		MensaCardAdapter adapter = new MensaCardAdapter(entries);
 		recyclerView.setLayoutManager(new LinearLayoutManager(mainActivity));
 		recyclerView.setAdapter(adapter);
 		return root;

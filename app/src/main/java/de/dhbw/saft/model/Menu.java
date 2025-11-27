@@ -7,6 +7,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Arrays;
 
+import de.dhbw.saft.common.Entry;
+
 /**
  * Represents a single day menu used for mapping JSON response from API.
  */
@@ -15,7 +17,8 @@ public record Menu(String date, Dish[] mainCourses, Dish[] desserts) {
 	/**
 	 * Represents a single dish in the menu.
 	 */
-	public record Dish(@NonNull String name, @SerializedName("priceStudent") float price, @Nullable String image) {
+	public record Dish(@NonNull String name, @SerializedName("priceStudent") float price,
+			@Nullable String image) implements Entry {
 
 		/**
 		 * Extracts the dish name from additional description.
@@ -31,10 +34,15 @@ public record Menu(String date, Dish[] mainCourses, Dish[] desserts) {
 			return Character.toUpperCase(base.charAt(0)) + base.substring(1);
 		}
 
+		@Override
+		public Type getEntryType() {
+			return Entry.Type.ITEM;
+		}
+
 		/**
 		 * Extracts the additional description from the name.
 		 *
-		 * @return The ingredients
+		 * @return The ingredients⁄
 		 */
 		public @Nullable String getDescription() {
 			if (!name.contains(",")) {

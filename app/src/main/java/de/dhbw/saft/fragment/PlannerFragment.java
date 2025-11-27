@@ -22,7 +22,6 @@ import de.dhbw.saft.adapter.LectureCardAdapter;
 import de.dhbw.saft.common.Formatter;
 import de.dhbw.saft.common.Header;
 import de.dhbw.saft.model.Lecture;
-import de.dhbw.saft.common.LectureCard;
 import de.dhbw.saft.common.Entry;
 import de.dhbw.saft.service.DataService;
 
@@ -36,22 +35,19 @@ public class PlannerFragment extends Fragment {
 		final RecyclerView recyclerView = root.findViewById(R.id.recycler_view);
 
 		final List<Lecture> lectures = DataService.getLectures();
-		List<Entry> dates = new ArrayList<>();
-		Set<String> addedDates = new HashSet<>();
+		final List<Entry> entries = new ArrayList<>();
+		final Set<String> dates = new HashSet<>();
 
 		for (Lecture lecture : lectures) {
-			LectureCard item = new LectureCard(lecture.name(), lecture.type(), lecture.rooms(), lecture.start(),
-					lecture.end());
-			String date = Formatter.formatDate(item.start());
-
-			if (date != null && !addedDates.contains(date)) {
-				dates.add(new Header(date));
-				addedDates.add(date);
+			String date = Formatter.formatDate(lecture.start());
+			if (date != null && dates.add(date)) {
+				entries.add(new Header(date));
 			}
-			dates.add(item);
+
+			entries.add(lecture);
 		}
 
-		LectureCardAdapter adapter = new LectureCardAdapter(dates);
+		LectureCardAdapter adapter = new LectureCardAdapter(entries);
 		recyclerView.setLayoutManager(new LinearLayoutManager(mainActivity));
 		recyclerView.setAdapter(adapter);
 		return root;
