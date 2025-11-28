@@ -1,10 +1,11 @@
 package de.dhbw.saft.adapter;
 
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.Locale;
 import de.dhbw.saft.R;
 import de.dhbw.saft.common.Entry;
 import de.dhbw.saft.model.Menu;
+import de.dhbw.saft.service.DataService;
 
 public class MensaCardAdapter extends CardAdapter<MensaCardAdapter.CardViewHolder, Menu.Dish> {
 
@@ -35,12 +37,27 @@ public class MensaCardAdapter extends CardAdapter<MensaCardAdapter.CardViewHolde
 		holder.textDishTitle.setText(item.getDeclarativeName());
 		holder.textIngredients.setText(item.getDescription());
 		holder.textPrice.setText(String.format(Locale.getDefault(), "%,.2f €", item.price()));
-		Drawable drawable = Drawable.createFromPath(item.image());
-		holder.imageViewDish.setForeground(drawable);
+
+		final String image = item.image();
+		final ImageView imageView = holder.imageViewDish;
+		if (image == null) {
+			imageView.setImageResource(R.drawable.food_default);
+			return;
+		}
+
+		DataService.fetchImage(image).thenAccept(bitmap -> {
+			if (bitmap == null) {
+				imageView.post(() -> imageView.setImageResource(R.drawable.food_default));
+				return;
+			}
+
+			Drawable drawable = new BitmapDrawable(holder.imageViewDish.getResources(), bitmap);
+			holder.imageViewDish.post(() -> imageView.setImageDrawable(drawable));
+		});
 	}
 
 	public static class CardViewHolder extends RecyclerView.ViewHolder {
-		final CardView imageViewDish;
+		final ImageView imageViewDish;
 		final TextView textDishTitle, textIngredients, textPrice;
 
 		public CardViewHolder(View itemView) {
@@ -48,7 +65,7 @@ public class MensaCardAdapter extends CardAdapter<MensaCardAdapter.CardViewHolde
 			textDishTitle = itemView.findViewById(R.id.text_mensa_dish_title);
 			textIngredients = itemView.findViewById(R.id.text_mensa_ingredients);
 			textPrice = itemView.findViewById(R.id.text_mensa_price);
-			imageViewDish = itemView.findViewById(R.id.card_view_dish_image);
+			imageViewDish = itemView.findViewById(R.id.image_dish);
 		}
 	}
 }

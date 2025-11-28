@@ -1,5 +1,7 @@
 package de.dhbw.saft.service;
 
+import android.graphics.Bitmap;
+
 import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
@@ -17,6 +19,7 @@ import java.util.concurrent.Executors;
 import de.dhbw.saft.BuildConfig;
 import de.dhbw.saft.model.Menu;
 import de.dhbw.saft.model.Lecture;
+import de.dhbw.saft.parser.BitmapParser;
 import de.dhbw.saft.parser.ResponseParser;
 import de.dhbw.saft.parser.StringParser;
 import lombok.Getter;
@@ -68,6 +71,7 @@ public class DataService {
 
 	/**
 	 * Fetches and caches all menus from API.
+	 *
 	 * @return 		 A {@link CompletableFuture<Void>} which is completed once
 	 * 				 all menus have been fetched.
 	 */
@@ -92,6 +96,16 @@ public class DataService {
 		} catch (IllegalArgumentException exception) {
 			return CompletableFuture.completedFuture(null);
 		}
+	}
+
+	/**
+	 * Fetches an Image and parses it to a {@link Bitmap}.
+	 *
+	 * @param url	The url to request
+	 * @return 		A {@link CompletableFuture<Bitmap>}
+	 */
+	public static CompletableFuture<Bitmap> fetchImage(@NonNull String url) {
+		return get(url, new BitmapParser());
 	}
 
 	/**
