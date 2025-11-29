@@ -25,7 +25,6 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import de.dhbw.saft.R;
-import de.dhbw.saft.adapter.LectureCardAdapter;
 import de.dhbw.saft.adapter.MensaCardAdapter;
 import de.dhbw.saft.common.Entry;
 import de.dhbw.saft.common.Formatter;
