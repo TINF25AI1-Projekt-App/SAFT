@@ -13,14 +13,22 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package de.dhbw.saft.common;
+package de.dhbw.saft.parser;
 
-import de.dhbw.saft.model.Lecture;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
-public record LectureCard(String name, Lecture.Type type, String[] rooms, String start, String end) implements Entry {
+import androidx.annotation.NonNull;
+
+import java.io.IOException;
+
+import okhttp3.ResponseBody;
+
+public class BitmapParser implements ResponseParser<Bitmap> {
 
 	@Override
-	public Entry.Type getEntryType() {
-		return Type.ITEM;
+	public Bitmap parse(@NonNull ResponseBody body) throws IOException {
+		byte[] bytes = body.bytes();
+		return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 	}
 }

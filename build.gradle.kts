@@ -14,7 +14,8 @@ subprojects {
             trimTrailingWhitespace()
             endWithNewline()
             removeUnusedImports()
-            toggleOffOn("/*", "*/")
+            toggleOffOn("/**", "*/")
+            licenseHeaderFile(rootProject.file("HEADER.txt"))
             eclipse()
         }
     }

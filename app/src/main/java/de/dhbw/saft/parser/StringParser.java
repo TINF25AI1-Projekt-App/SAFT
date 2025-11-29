@@ -13,14 +13,18 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package de.dhbw.saft.common;
+package de.dhbw.saft.parser;
 
-import de.dhbw.saft.model.Lecture;
+import androidx.annotation.NonNull;
 
-public record LectureCard(String name, Lecture.Type type, String[] rooms, String start, String end) implements Entry {
+import java.io.IOException;
+
+import okhttp3.ResponseBody;
+
+public class StringParser implements ResponseParser<String> {
 
 	@Override
-	public Entry.Type getEntryType() {
-		return Type.ITEM;
+	public String parse(@NonNull ResponseBody body) throws IOException {
+		return body.string();
 	}
 }
