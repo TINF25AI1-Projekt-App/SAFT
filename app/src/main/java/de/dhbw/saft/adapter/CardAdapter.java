@@ -16,6 +16,10 @@ import de.dhbw.saft.common.Entry;
 import de.dhbw.saft.common.Header;
 import lombok.AllArgsConstructor;
 
+/**
+ * Abstract recycler adapter that handles a list of {@link Entry} items.
+ * Subclasses define the layout and binding logic for card entries.
+ */
 @AllArgsConstructor
 public abstract class CardAdapter<T extends RecyclerView.ViewHolder, E extends Entry>
 		extends
@@ -31,10 +35,6 @@ public abstract class CardAdapter<T extends RecyclerView.ViewHolder, E extends E
 	@Override
 	public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 		final Entry.Type type = Entry.Type.fromIdentifier(viewType);
-		if (type == null) {
-			throw new IllegalArgumentException("Unknown viewType: " + viewType);
-		}
-
 		return switch (type) {
 			case HEADER -> {
 				final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.planner_item_header, parent,

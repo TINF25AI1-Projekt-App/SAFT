@@ -13,9 +13,14 @@ import java.util.Locale;
 
 import de.dhbw.saft.R;
 import de.dhbw.saft.common.Entry;
+import de.dhbw.saft.model.Lecture;
 import de.dhbw.saft.model.Menu;
 import de.dhbw.saft.service.DataService;
 
+/**
+ * Adapter for displaying dish entries inside the planner list.
+ * It binds {@link Menu.Dish} items to their card layout.
+ */
 public class MensaCardAdapter extends CardAdapter<MensaCardAdapter.CardViewHolder, Menu.Dish> {
 
 	public MensaCardAdapter(List<Entry> items) {

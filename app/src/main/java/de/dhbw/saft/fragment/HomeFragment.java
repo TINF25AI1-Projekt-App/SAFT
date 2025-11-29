@@ -21,9 +21,13 @@ import de.dhbw.saft.databinding.FragmentHomeBinding;
 import de.dhbw.saft.model.Lecture;
 import de.dhbw.saft.service.DataService;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
+/**
+ * Fragment responsible for displaying the home screen of the SAFT app.
+ * This fragment reads lecture data from {@link DataService}
+ * and derives a {@link LectureFeed} containing all information required for
+ * the header card on the home screen.
+ */
 public class HomeFragment extends Fragment {
 
 	@Getter

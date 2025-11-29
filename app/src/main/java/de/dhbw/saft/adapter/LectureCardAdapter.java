@@ -13,6 +13,10 @@ import de.dhbw.saft.common.Entry;
 import de.dhbw.saft.common.Formatter;
 import de.dhbw.saft.model.Lecture;
 
+/**
+ * Adapter for displaying lecture entries inside the planner list.
+ * It binds {@link Lecture} items to their card layout.
+ */
 public class LectureCardAdapter extends CardAdapter<LectureCardAdapter.CardViewHolder, Lecture> {
 
 	public LectureCardAdapter(List<Entry> items) {

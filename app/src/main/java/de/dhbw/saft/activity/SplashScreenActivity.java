@@ -13,6 +13,10 @@ import de.dhbw.saft.HomeActivity;
 import de.dhbw.saft.R;
 import de.dhbw.saft.service.DataService;
 
+/**
+ * Splash screen activity responsible for preloading all required data
+ * before the main application starts.
+ */
 @SuppressLint("CustomSplashScreen")
 public class SplashScreenActivity extends AppCompatActivity {
 
@@ -25,9 +29,10 @@ public class SplashScreenActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_splash);
 
 		// TODO: Use selected Course. If none is selected, don't fetch
-		CompletableFuture.allOf(DataService.fetchLectures("MA-TINF25AI1"), DataService.fetchMenus()).thenRun(() -> {
-			startActivity(new Intent(this, HomeActivity.class));
-			finish();
-		});
+		CompletableFuture.allOf(DataService.fetchLectures("MA-TINF25AI1"), DataService.fetchMenus())
+				.thenRun(() -> runOnUiThread(() -> {
+					startActivity(new Intent(this, HomeActivity.class));
+					finish();
+				}));
 	}
 }
