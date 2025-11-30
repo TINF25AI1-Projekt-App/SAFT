@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.okhttp)
     implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.cardview)
 
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)

@@ -24,6 +24,9 @@ import java.io.IOException;
 
 import okhttp3.ResponseBody;
 
+/**
+ * Parser that converts an HTTP response body into a {@link Bitmap}.
+ */
 public class BitmapParser implements ResponseParser<Bitmap> {
 
 	@Override

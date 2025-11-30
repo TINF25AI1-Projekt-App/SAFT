@@ -21,6 +21,9 @@ import java.io.IOException;
 
 import okhttp3.ResponseBody;
 
+/**
+ * Parser that converts an HTTP response body into a string.
+ */
 public class StringParser implements ResponseParser<String> {
 
 	@Override
