@@ -17,8 +17,8 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Create tag Number
-        run: echo "TAG_NAME=v${{ github.run_number }}" >> $GITHUB_ENV
+      - name: Set tag name
+        run: echo "TAG_NAME=1.0.${{ github.run_number }}" >> $GITHUB_ENV
 
       - name: Build core shadowJar
         run: ./gradlew :core:clean :core:shadowJar --no-daemon
@@ -26,7 +26,7 @@ jobs:
       - name: Grab output
         id: jar
         run: |
-          FILE=$(ls core/build/libs/*-all.jar | head -n 1)
+          FILE=$(ls core/build/libs/SAFT-*-core.jar | head -n 1)
           echo "file=$FILE" >> $GITHUB_OUTPUT
 
       - name: Create tag
@@ -36,7 +36,7 @@ jobs:
           git tag "$TAG_NAME"
           git push origin "$TAG_NAME"
 
-      - name: Create Release
+      - name: Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.TAG_NAME }}
