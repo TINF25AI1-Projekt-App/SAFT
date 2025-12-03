@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 
 import java.io.IOException;
 
+import de.dhbw.core.parser.ResponseParser;
 import okhttp3.ResponseBody;
 
 /**

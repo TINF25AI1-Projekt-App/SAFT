@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "SAFT"
 include(":app")
+include(":core")

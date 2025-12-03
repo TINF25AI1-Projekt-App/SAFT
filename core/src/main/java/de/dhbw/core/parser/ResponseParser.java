@@ -13,9 +13,9 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package de.dhbw.saft.parser;
+package de.dhbw.core.parser;
 
-import androidx.annotation.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
@@ -28,12 +28,5 @@ import okhttp3.ResponseBody;
  */
 public interface ResponseParser<T> {
 
-	/**
-	 * Parses the given HTTP response body into the target type.
-	 *
-	 * @param body			The response body to parse
-	 * @return 				The parsed value
-	 * @throws IOException	If reading or parsing fails
-	 */
-	T parse(@NonNull ResponseBody body) throws IOException;
+	T parse(@NotNull ResponseBody body) throws IOException;
 }

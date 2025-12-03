@@ -44,10 +44,11 @@ public class SplashScreenActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_splash);
 
 		// TODO: Use selected Course. If none is selected, don't fetch
-		CompletableFuture.allOf(DataService.fetchLectures("MA-TINF25AI1"), DataService.fetchMenus())
-				.thenRun(() -> runOnUiThread(() -> {
-					startActivity(new Intent(this, HomeActivity.class));
-					finish();
-				}));
+
+		final DataService service = new DataService();
+		CompletableFuture.allOf(service.fetchLectures("MA-TINF25AI1"), service.fetchMenus()).thenRun(() -> {
+			startActivity(new Intent(this, HomeActivity.class));
+			finish();
+		});
 	}
 }

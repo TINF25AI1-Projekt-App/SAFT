@@ -13,21 +13,18 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package de.dhbw.saft.parser;
+package de.dhbw.core.parser;
 
-import androidx.annotation.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
 import okhttp3.ResponseBody;
 
-/**
- * Parser that converts an HTTP response body into a string.
- */
-public class StringParser implements ResponseParser<String> {
+public class DefaultParser implements de.dhbw.core.parser.ResponseParser<String> {
 
 	@Override
-	public String parse(@NonNull ResponseBody body) throws IOException {
+	public String parse(@NotNull ResponseBody body) throws IOException {
 		return body.string();
 	}
 }
