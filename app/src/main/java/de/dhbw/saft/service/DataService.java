@@ -15,6 +15,8 @@
 */
 package de.dhbw.saft.service;
 
+import android.graphics.Bitmap;
+
 import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
@@ -24,6 +26,7 @@ import com.google.gson.JsonObject;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -34,17 +37,15 @@ import de.dhbw.core.parser.DefaultParser;
 import de.dhbw.saft.BuildConfig;
 import de.dhbw.saft.model.Menu;
 import de.dhbw.saft.model.Lecture;
-import lombok.Getter;
+import de.dhbw.saft.parser.BitmapParser;
 
 /**
  * Service class responsible for loading and caching data from API.
  */
 public class DataService extends NetworkClient {
 
-	@Getter
-	private static List<Lecture> lectures = new ArrayList<>();
-	@Getter
-	private static List<Menu> menus = new ArrayList<>();
+	private static List<Lecture> LECTURES = new ArrayList<>();
+	private static List<Menu> MENUS = new ArrayList<>();
 	private static final Gson GSON = new Gson();
 
 	@NonNull
@@ -74,9 +75,9 @@ public class DataService extends NetworkClient {
 					return;
 				}
 
-				lectures.clear();
+				LECTURES.clear();
 				Lecture[] plan = GSON.fromJson(json, Lecture[].class);
-				lectures.addAll(Arrays.asList(plan));
+				LECTURES.addAll(Arrays.asList(plan));
 			});
 		} catch (IllegalArgumentException exception) {
 			return CompletableFuture.completedFuture(null);
@@ -102,12 +103,40 @@ public class DataService extends NetworkClient {
 					return;
 				}
 
-				menus.clear();
+				MENUS.clear();
 				Menu[] menuArray = GSON.fromJson(menusArray, Menu[].class);
-				menus.addAll(Arrays.asList(menuArray));
+				MENUS.addAll(Arrays.asList(menuArray));
 			});
 		} catch (IllegalArgumentException exception) {
 			return CompletableFuture.completedFuture(null);
 		}
+	}
+
+	/**
+	 * Fetches an Image and parses it to a {@link Bitmap}.
+	 *
+	 * @param url	The url to request
+	 * @return 		A {@link CompletableFuture<Bitmap>}
+	 */
+	public CompletableFuture<Bitmap> fetchImage(@NonNull String url) {
+		return fetch(url, new BitmapParser());
+	}
+
+	/**
+	 * Returns an unmodifiable list of all cached lectures.
+	 *
+	 * @return Unmodifiable list of lectures
+	 */
+	public static List<Lecture> getLectures() {
+		return Collections.unmodifiableList(LECTURES);
+	}
+
+	/**
+	 * Returns an unmodifiable list of all cached menus.
+	 *
+	 * @return Unmodifiable list of menus
+	 */
+	public static List<Menu> getMenus() {
+		return Collections.unmodifiableList(MENUS);
 	}
 }
