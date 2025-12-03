@@ -1,5 +1,6 @@
 plugins {
     id("java-library")
+    alias(libs.plugins.shadow)
 }
 
 group = "de.dhbw.saft"
@@ -12,4 +13,15 @@ java {
 
 dependencies {
     implementation(libs.okhttp)
+}
+
+tasks {
+    build {
+        dependsOn(shadowJar)
+    }
+    shadowJar {
+        archiveBaseName.set(rootProject.name)
+        archiveClassifier.set(project.name)
+        archiveVersion.set(version.toString())
+    }
 }

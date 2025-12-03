@@ -18,6 +18,7 @@ gson = "2.13.2"
 okhttp  = "5.3.0"
 recyclerview = "1.4.0"
 cardview = "1.0.0"
+shadow = "9.2.2"
 
 [libraries]
 androidx-activity = { module = "androidx.activity:activity", version.ref = "activity" }
@@ -41,3 +42,4 @@ androidx-cardview = { group = "androidx.cardview", name = "cardview", version.re
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }

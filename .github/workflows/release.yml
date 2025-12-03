@@ -1,0 +1,45 @@
+name: Release Core Module
+
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Create tag Number
+        run: echo "TAG_NAME=v${{ github.run_number }}" >> $GITHUB_ENV
+
+      - name: Build core shadowJar
+        run: ./gradlew :core:clean :core:shadowJar --no-daemon
+
+      - name: Grab output
+        id: jar
+        run: |
+          FILE=$(ls core/build/libs/*-all.jar | head -n 1)
+          echo "file=$FILE" >> $GITHUB_OUTPUT
+
+      - name: Create tag
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git tag "$TAG_NAME"
+          git push origin "$TAG_NAME"
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.TAG_NAME }}
+          files: ${{ steps.jar.outputs.file }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
