@@ -13,5 +13,8 @@
     <string name="add_preference_title">Füge den %s hinzu:</string>
     <string name="add_preference_message">Bitte gebe einen Wert ein:</string>
     <string name="cancel">Abbrechen</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
+    <string name="back">Back</string>
+    <string name="settings">Einstellungen</string>
+    <string name="details">Details</string>
 </resources>
