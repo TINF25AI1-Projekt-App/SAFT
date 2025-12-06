@@ -15,4 +15,12 @@
         <item>Moodle</item>
         <item>Zimbra</item>
     </string-array>
+    <string-array name="preferences_title">
+        <item>Kurs</item>
+        <item>Test</item>
+    </string-array>
+    <string-array name="preferences_description">
+        <item>Dein ausgewählter Kurs für den Stundenplan</item>
+        <item>Test Beschreibung</item>
+    </string-array>
 </resources>

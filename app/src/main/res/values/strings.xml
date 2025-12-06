@@ -9,4 +9,9 @@
     <string name="app_full_name">Student • Anxiety and • Fear • Treatment</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="preference_hint_course">Gebe den Kurs ein</string>
+    <string name="add_preference_title">Füge den %s hinzu:</string>
+    <string name="add_preference_message">Bitte gebe einen Wert ein:</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="ok">Ok</string>
 </resources>
