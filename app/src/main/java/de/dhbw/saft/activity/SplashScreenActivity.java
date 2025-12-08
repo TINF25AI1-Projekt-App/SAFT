@@ -43,7 +43,6 @@ public class SplashScreenActivity extends AppCompatActivity {
 
 	public static final String PREFS_NAME = "settings_prefs";
 	public static final String KEY_NAME = "kurs";
-	public static final String KEY_NAME2 = "test";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +66,6 @@ public class SplashScreenActivity extends AppCompatActivity {
 	private AddPreferenceDialog getAddPreferenceDialog(SharedPreferencesManager prefsManager) {
 		Map<String, String> keyValueMap = new HashMap<>();
 		keyValueMap.put(KEY_NAME, "${INPUT}");
-		// TODO : remove
-		keyValueMap.put(KEY_NAME2, "test");
 
 		String[] suggestions = {"MA-TINF25AI1", "Suggestion 2", "Suggestion 3"};
 		AddPreferenceDialog dialog = new AddPreferenceDialog(this, prefsManager, keyValueMap, suggestions, null,

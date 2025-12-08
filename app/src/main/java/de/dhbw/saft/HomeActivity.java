@@ -98,6 +98,12 @@ public class HomeActivity extends AppCompatActivity {
 			}
 		};
 		getOnBackPressedDispatcher().addCallback(this, callback);
+
+		binding.bottomNavigation.setPadding(binding.bottomNavigation.getPaddingLeft(),
+				binding.bottomNavigation.getPaddingTop(), binding.bottomNavigation.getPaddingRight(), 0);
+
+		binding.getRoot().setOnApplyWindowInsetsListener((v, insets) -> insets);
+
 	}
 
 	private boolean onBottomNavItemSelected(MenuItem item) {

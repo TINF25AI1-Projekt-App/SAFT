@@ -99,8 +99,8 @@ public class AddPreferenceDialog {
 					String value = entry.getValue().replace("${INPUT}", text);
 					prefs.putString(key, value);
 				}
-				assert textView != null;
-				textView.setText(text);
+				if (textView != null)
+					textView.setText(text);
 				if (listener != null) {
 					listener.onPreferenceSaved(text);
 				}
