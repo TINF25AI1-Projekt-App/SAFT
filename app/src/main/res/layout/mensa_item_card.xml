@@ -49,9 +49,19 @@
                     android:layout_marginBottom="2dp"
                     android:text="Gericht"
                     android:textColor="@color/black"
-                    android:textSize="24sp"
+                    android:textSize="22sp"
                     android:textStyle="bold"
-                    android:visibility="visible" />
+                    android:visibility="visible"
+                    android:padding="16dp"
+
+                    android:maxLines="4"
+                    android:ellipsize="end"
+                    android:breakStrategy="simple"
+                    android:hyphenationFrequency="normal"
+                    android:inputType="textMultiLine|textNoSuggestions"
+                    android:scrollHorizontally="false"
+                    android:singleLine="false"
+/>
 
                 <View
                     android:id="@+id/view"

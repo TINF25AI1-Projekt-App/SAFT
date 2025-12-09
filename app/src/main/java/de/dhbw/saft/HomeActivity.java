@@ -16,21 +16,28 @@
 package de.dhbw.saft;
 
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import de.dhbw.saft.activity.SplashScreenActivity;
+import de.dhbw.saft.common.SharedPreferencesManager;
 import de.dhbw.saft.databinding.ActivityHomeBinding;
 import de.dhbw.saft.databinding.ToolbarBinding;
 import de.dhbw.saft.fragment.HomeFragment;
 import de.dhbw.saft.fragment.MensaFragment;
 import de.dhbw.saft.fragment.LectureFragment;
+import de.dhbw.saft.fragment.SettingsFragment;
 
 /**
  * Main activity of the SAFT app that hosts the primary navigation structure,
@@ -40,7 +47,7 @@ import de.dhbw.saft.fragment.LectureFragment;
 public class HomeActivity extends AppCompatActivity {
 
 	private final Map<Integer, Fragment> fragments = new HashMap<>();
-
+	private BottomNavigationView bottomNavigation;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -51,31 +58,90 @@ public class HomeActivity extends AppCompatActivity {
 		ToolbarBinding toolbar = binding.toolbar;
 		toolbar.toolbarTitle.setText(R.string.home_fragment_title);
 
+		final SharedPreferencesManager prefsManager = SharedPreferencesManager.getInstance(this,
+				SplashScreenActivity.PREFS_NAME);
+		bottomNavigation = binding.bottomNavigation;
+
 		final HomeFragment homeFragment = new HomeFragment();
-		loadFragment(homeFragment);
 		fragments.putAll(Map.of(R.id.nav_home, homeFragment, R.id.nav_mensa, new MensaFragment(), R.id.nav_planner,
 				new LectureFragment()));
 
-		final BottomNavigationView bottomNavigation = binding.bottomNavigation;
-		bottomNavigation.setOnItemSelectedListener(this::onClickBottomNavigation);
-		bottomNavigation.setSelectedItemId(R.id.nav_home);
+		bottomNavigation.setOnItemSelectedListener(this::onBottomNavItemSelected);
+		loadFragment(homeFragment);
+
+		getSupportFragmentManager().addOnBackStackChangedListener(this::onBackStackChanged);
+
+		toolbar.toolbarBackButton.setOnClickListener(view -> {
+			if (getSupportFragmentManager().getBackStackEntryCount() > 1)
+				getSupportFragmentManager().popBackStack();
+			else
+				getOnBackPressedDispatcher().onBackPressed();
+		});
+
+		toolbar.toolbarButton.setOnClickListener(view -> {
+			final SettingsFragment settingsFragment = new SettingsFragment(toolbar, bottomNavigation, prefsManager);
+			loadFragment(settingsFragment);
+			Menu menu = bottomNavigation.getMenu();
+			for (int i = 0; i < menu.size(); i++) {
+				menu.getItem(i).setChecked(false);
+			}
+			toolbar.toolbarButton.setVisibility(View.GONE);
+		});
+
+		OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+			@Override
+			public void handleOnBackPressed() {
+				if (getSupportFragmentManager().getBackStackEntryCount() > 1)
+					getSupportFragmentManager().popBackStack();
+				else
+					finishAffinity();
+			}
+		};
+		getOnBackPressedDispatcher().addCallback(this, callback);
+
+		binding.bottomNavigation.setPadding(binding.bottomNavigation.getPaddingLeft(),
+				binding.bottomNavigation.getPaddingTop(), binding.bottomNavigation.getPaddingRight(), 0);
+
+		binding.getRoot().setOnApplyWindowInsetsListener((v, insets) -> insets);
+
 	}
 
-	/**
-	 * Handles bottom navigation item selections by loading the
-	 * corresponding fragment from the internal fragment map.
-	 *
-	 * @param item	The selected menu item
-	 * @return 		Whether a matching fragment exists
-	 */
-	private boolean onClickBottomNavigation(MenuItem item) {
-		final Fragment fragment = fragments.get(item.getItemId());
-		if (fragment == null) {
+	private boolean onBottomNavItemSelected(MenuItem item) {
+		Fragment targetFragment = fragments.get(item.getItemId());
+		if (targetFragment == null)
 			return false;
+
+		Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+		if (currentFragment != null && currentFragment.getClass() == targetFragment.getClass()) {
+			if (getSupportFragmentManager().getBackStackEntryCount() > 1)
+				getSupportFragmentManager().popBackStackImmediate();
+			return true;
 		}
 
-		loadFragment(fragment);
+		getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+		loadFragment(targetFragment);
 		return true;
+	}
+
+	private void onBackStackChanged() {
+		Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+		if (currentFragment != null)
+			selectBottomNavForFragment(currentFragment);
+	}
+	private void selectBottomNavForFragment(Fragment currentFragment) {
+		for (Map.Entry<Integer, Fragment> entry : fragments.entrySet()) {
+			if (currentFragment.getClass() == entry.getValue().getClass()) {
+				Menu menu = bottomNavigation.getMenu();
+				for (int i = 0; i < menu.size(); i++) {
+					menu.getItem(i).setChecked(menu.getItem(i).getItemId() == entry.getKey());
+				}
+				return;
+			}
+		}
+		Menu menu = bottomNavigation.getMenu();
+		for (int i = 0; i < menu.size(); i++) {
+			menu.getItem(i).setChecked(false);
+		}
 	}
 
 	/**
@@ -84,6 +150,13 @@ public class HomeActivity extends AppCompatActivity {
 	 * @param fragment the fragment to display
 	 */
 	private void loadFragment(Fragment fragment) {
-		getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+		Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+
+		if (currentFragment != null && currentFragment.getClass() == fragment.getClass())
+			return;
+
+		String tag = fragment.getClass().getSimpleName();
+		getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment, tag)
+				.addToBackStack(tag).commit();
 	}
 }
