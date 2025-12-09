@@ -13,8 +13,7 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package de.dhbw.saft.common;
+package de.dhbw.core.model;
 
-public record PreferenceItem(String title, String description, String value) {
-
+public record Course(String name) {
 }
