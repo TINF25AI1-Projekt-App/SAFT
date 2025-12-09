@@ -17,7 +17,6 @@ package de.dhbw.saft.common;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
@@ -26,7 +25,6 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -80,11 +78,11 @@ public class DialogBuilder {
 		if (existingValue != null)
 			input.setText(existingValue);
 		else {
-            input.setHint((context.getString(R.string.preference_hint_course)));
-        }
+			input.setHint((context.getString(R.string.preference_hint_course)));
+		}
 
 		ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_dropdown_item_1line,
-                suggetions.toArray(String[]::new));
+				suggetions.toArray(String[]::new));
 		input.setAdapter(adapter);
 		input.setThreshold(1);
 

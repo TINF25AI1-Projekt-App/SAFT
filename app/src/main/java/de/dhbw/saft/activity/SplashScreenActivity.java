@@ -18,7 +18,6 @@ package de.dhbw.saft.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
@@ -56,10 +55,8 @@ public class SplashScreenActivity extends AppCompatActivity {
 		final String value = preferenceService.getString(KEY_NAME, null);
 		dataService.fetchCourses().thenRun(() -> {
 			if (value == null || value.trim().isEmpty()) {
-				runOnUiThread(() ->
-					new DialogBuilder(this, preferenceService, Map.of(KEY_NAME, "${INPUT}"))
-							.addSuggestions(DataService.getCourses()).onOkay(course -> fetch(dataService, course)).show()
-				);
+				runOnUiThread(() -> new DialogBuilder(this, preferenceService, Map.of(KEY_NAME, "${INPUT}"))
+						.addSuggestions(DataService.getCourses()).onOkay(course -> fetch(dataService, course)).show());
 			} else {
 				fetch(dataService, value);
 			}

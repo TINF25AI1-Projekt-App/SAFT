@@ -17,8 +17,8 @@ package de.dhbw.saft.common;
 
 public record Preference(String title, String description, String value) implements Entry {
 
-    @Override
-    public Type getEntryType() {
-        return Type.ITEM;
-    }
+	@Override
+	public Type getEntryType() {
+		return Type.ITEM;
+	}
 }

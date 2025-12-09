@@ -20,20 +20,12 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -69,8 +61,8 @@ public class SettingsFragment extends RecyclerFragment<SettingsCardAdapter> {
 	@NonNull
 	@Override
 	public List<Entry> getEntries() {
-		final SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(PreferenceService.PREFERENCES_NAME,
-				MODE_PRIVATE);
+		final SharedPreferences sharedPreferences = requireActivity()
+				.getSharedPreferences(PreferenceService.PREFERENCES_NAME, MODE_PRIVATE);
 		Map<String, ?> allPreferences = sharedPreferences.getAll();
 		List<Entry> preferences = new ArrayList<>();
 		String[] preferencesTitle = this.getResources().getStringArray(R.array.preferences_title);

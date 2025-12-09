@@ -16,9 +16,7 @@
 package de.dhbw.saft.adapter;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -33,22 +31,19 @@ import de.dhbw.saft.activity.SplashScreenActivity;
 import de.dhbw.saft.common.DialogBuilder;
 import de.dhbw.saft.common.Entry;
 import de.dhbw.saft.common.Preference;
-import de.dhbw.saft.model.Lecture;
 import de.dhbw.saft.service.DataService;
 import de.dhbw.saft.service.PreferenceService;
-import lombok.AllArgsConstructor;
 
 public class SettingsCardAdapter extends CardAdapter<SettingsCardAdapter.CardViewHolder, Preference> {
 
 	private final PreferenceService preferenceService;
 	private final Context context;
 
-
 	public SettingsCardAdapter(List<Entry> items, PreferenceService preferenceService, Context context) {
-        super(items);
-        this.preferenceService = preferenceService;
-        this.context = context;
-    }
+		super(items);
+		this.preferenceService = preferenceService;
+		this.context = context;
+	}
 
 	@Override
 	public int getLayoutResource() {
