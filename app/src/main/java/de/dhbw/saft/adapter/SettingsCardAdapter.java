@@ -34,12 +34,15 @@ import de.dhbw.saft.common.Preference;
 import de.dhbw.saft.service.DataService;
 import de.dhbw.saft.service.PreferenceService;
 
+/**
+ *
+ */
 public class SettingsCardAdapter extends CardAdapter<SettingsCardAdapter.CardViewHolder, Preference> {
 
 	private final PreferenceService preferenceService;
 	private final Context context;
 
-	public SettingsCardAdapter(List<Entry> items, PreferenceService preferenceService, Context context) {
+	public SettingsCardAdapter(@NonNull List<Entry> items, @NonNull PreferenceService preferenceService, @NonNull Context context) {
 		super(items);
 		this.preferenceService = preferenceService;
 		this.context = context;

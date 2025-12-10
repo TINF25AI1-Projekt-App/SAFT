@@ -30,20 +30,18 @@ import de.dhbw.saft.service.DataService;
 import lombok.Getter;
 
 /**
- * Fragment responsible for displaying the home screen of the SAFT app.
- * This fragment reads lecture data from {@link DataService}
- * and derives a {@link LectureFeed} containing all information required for
- * the header card on the home screen.
+ * Fragment responsible for displaying a website inside
+ * a Webview.
  */
-public class NavigatorFragment extends NamedFragment {
+public class WebViewFragment extends NamedFragment {
 
 	@Getter
 	private FragmentNavigatorBinding binding;
 
-	private String name;
-	private String link;
+	private final String name;
+	private final String link;
 
-	public NavigatorFragment(String name, String link) {
+	public WebViewFragment(String name, String link) {
 		this.name = name;
 		this.link = link;
 	}
@@ -52,7 +50,7 @@ public class NavigatorFragment extends NamedFragment {
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		binding = FragmentNavigatorBinding.inflate(inflater, container, false);
 
-		WebSettings settings = binding.webviewNavigator.getSettings();
+		final WebSettings settings = binding.webviewNavigator.getSettings();
 		settings.setDomStorageEnabled(true);
 		settings.setJavaScriptEnabled(true);
 		settings.setCacheMode(WebSettings.LOAD_DEFAULT);

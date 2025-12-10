@@ -18,6 +18,9 @@ package de.dhbw.saft.service;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+/**
+ * Service class responsible for storing and reading preferences.
+ */
 public class PreferenceService {
 
 	public static final String PREFERENCES_NAME = "settings_preferences";
@@ -28,10 +31,23 @@ public class PreferenceService {
 		preferences = context.getApplicationContext().getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
 	}
 
+	/**
+	 * Gets the preference value as String.
+	 *
+	 * @param key			Key to the preference value
+	 * @param defaultValue	Value to return if the preference is not found
+	 * @return				Preference as String or defaultValue
+	 */
 	public String getString(String key, String defaultValue) {
 		return preferences.getString(key, defaultValue);
 	}
 
+	/**
+	 * Stores a preference value.
+	 *
+	 * @param key		Key to the preference value
+	 * @param value		Value to store
+	 */
 	public void putString(String key, String value) {
 		preferences.edit().putString(key, value).apply();
 	}

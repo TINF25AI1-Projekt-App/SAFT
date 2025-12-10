@@ -42,7 +42,7 @@ import de.dhbw.saft.HomeActivity;
 import de.dhbw.saft.R;
 import de.dhbw.saft.databinding.FragmentHomeBinding;
 import de.dhbw.saft.fragment.HomeFragment;
-import de.dhbw.saft.fragment.NavigatorFragment;
+import de.dhbw.saft.fragment.WebViewFragment;
 
 /**
  * Utility class for dynamically creating clickable tiles in the
@@ -78,8 +78,8 @@ public class TileBuilder {
 	 */
 	public TileBuilder addLinkTile(int titleIndex, int iconResourceId, @NonNull String link) {
 		Consumer<View> onClickAction = view -> {
-			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
-			Intent chooser = Intent.createChooser(intent, fragment.getString(R.string.title_browser_chooser));
+			final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+			final Intent chooser = Intent.createChooser(intent, fragment.getString(R.string.title_browser_chooser));
 
 			if (chooser.resolveActivity(activity.getPackageManager()) != null) {
 				activity.startActivity(chooser);
@@ -94,7 +94,7 @@ public class TileBuilder {
 	public TileBuilder addWebViewTile(int titleIndex, int iconResourceId, String title, @NonNull String link) {
 		Consumer<View> onClickAction = view -> {
 			if (activity instanceof HomeActivity) {
-				((HomeActivity) activity).loadFragment(new NavigatorFragment(title, link));
+				((HomeActivity) activity).loadFragment(new WebViewFragment(title, link));
 			}
 		};
 		return addTile(titleIndex, iconResourceId, onClickAction);
@@ -115,7 +115,7 @@ public class TileBuilder {
 		textView.setTextColor(ContextCompat.getColor(activity, android.R.color.black));
 		textView.setGravity(Gravity.CENTER);
 
-		ImageView imageView = new ImageView(activity);
+		final ImageView imageView = new ImageView(activity);
 		imageView.setLayoutParams(new LinearLayout.LayoutParams(100, 100));
 		imageView.setImageResource(iconResourceId);
 

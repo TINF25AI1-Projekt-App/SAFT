@@ -15,6 +15,12 @@
 */
 package de.dhbw.saft.common;
 
+import de.dhbw.saft.fragment.SettingsFragment;
+
+/**
+ * Represents all information required to display the preference
+ * at {@link SettingsFragment}.
+ */
 public record Preference(String title, String description, String value) implements Entry {
 
 	@Override

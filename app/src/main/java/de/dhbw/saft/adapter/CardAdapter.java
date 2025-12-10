@@ -67,7 +67,7 @@ public abstract class CardAdapter<T extends RecyclerView.ViewHolder, E extends E
 	@Override
 	@SuppressLint("SetTextI18n")
 	public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
-		Entry entry = items.get(position);
+		final Entry entry = items.get(position);
 		if (viewHolder instanceof HeaderViewHolder holder) {
 			Header header = (Header) entry;
 			holder.date.setText(header.date());
@@ -87,6 +87,9 @@ public abstract class CardAdapter<T extends RecyclerView.ViewHolder, E extends E
 		return items.size();
 	}
 
+	/**
+	 * Responsible for holding the headline of Entries.
+	 */
 	private static class HeaderViewHolder extends RecyclerView.ViewHolder {
 		final TextView date;
 

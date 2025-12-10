@@ -60,7 +60,7 @@ public class HomeActivity extends AppCompatActivity {
 
 		final PreferenceService preferenceService = new PreferenceService(this);
 
-		ToolbarBinding toolbar = binding.toolbar;
+		final ToolbarBinding toolbar = binding.toolbar;
 		toolbarTitle = toolbar.toolbarTitle;
 		toolbar.toolbarButton.setOnClickListener(view -> {
 			final SettingsFragment settingsFragment = new SettingsFragment(toolbar, bottomNavigation,
@@ -85,6 +85,29 @@ public class HomeActivity extends AppCompatActivity {
 		loadFragment(homeFragment);
 	}
 
+	/**
+	 * Replaces the current fragment inside the activity's container.
+	 *
+	 * @param fragment the fragment to display
+	 */
+	public void loadFragment(NamedFragment fragment) {
+		final Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+		if (currentFragment != null && currentFragment.getClass() == fragment.getClass()) {
+			return;
+		}
+
+		final String tag = fragment.getClass().getSimpleName();
+		fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment, tag).commit();
+		toolbarTitle.setText(fragment.getName());
+	}
+
+	/**
+	 * Event, which is called once an Item in the
+	 * bottom navigation is selected.
+	 *
+	 * @param item	The selected item
+	 * @return		Whether the item should be marked as selected
+	 */
 	private boolean onBottomNavItemSelected(MenuItem item) {
 		NamedFragment target = fragments.get(item.getItemId());
 		if (target == null) {
@@ -93,21 +116,5 @@ public class HomeActivity extends AppCompatActivity {
 
 		loadFragment(target);
 		return true;
-	}
-
-	/**
-	 * Replaces the current fragment inside the activity's container.
-	 *
-	 * @param fragment the fragment to display
-	 */
-	public void loadFragment(NamedFragment fragment) {
-		Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-		if (currentFragment != null && currentFragment.getClass() == fragment.getClass()) {
-			return;
-		}
-
-		String tag = fragment.getClass().getSimpleName();
-		fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment, tag).commit();
-		toolbarTitle.setText(fragment.getName());
 	}
 }

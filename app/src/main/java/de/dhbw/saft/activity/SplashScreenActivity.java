@@ -19,6 +19,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.core.splashscreen.SplashScreenViewProvider;
@@ -43,7 +44,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
+		final SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
 		super.onCreate(savedInstanceState);
 
 		splashScreen.setOnExitAnimationListener(SplashScreenViewProvider::remove);
@@ -63,7 +64,14 @@ public class SplashScreenActivity extends AppCompatActivity {
 		});
 	}
 
-	private void fetch(DataService dataService, String course) {
+	/**
+	 * Fetches required data and navigates to Home screen, once all
+	 * requests are done.
+	 *
+	 * @param dataService	Service used to fetch
+	 * @param course		Course to fetch lectures for
+	 */
+	private void fetch(@NonNull DataService dataService, @NonNull String course) {
 		CompletableFuture.allOf(dataService.fetchLectures(course), dataService.fetchMenus())
 				.thenRun(() -> runOnUiThread(() -> {
 					startActivity(new Intent(this, HomeActivity.class));

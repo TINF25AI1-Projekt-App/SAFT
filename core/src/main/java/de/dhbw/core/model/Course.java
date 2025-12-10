@@ -15,5 +15,8 @@
 */
 package de.dhbw.core.model;
 
+/**
+ * Represents a single course.
+ */
 public record Course(String name) {
 }

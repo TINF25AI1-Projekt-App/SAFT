@@ -28,9 +28,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import de.dhbw.saft.HomeActivity;
 import de.dhbw.saft.R;
 import de.dhbw.saft.service.PreferenceService;
 
+/**
+ * Builder class for creating and displaying alerts
+ */
 public class DialogBuilder {
 
 	private final Context context;
@@ -48,21 +52,42 @@ public class DialogBuilder {
 		this.inputMap = inputMap;
 	}
 
+	/**
+	 * Adds suggestions to the text input.
+	 *
+	 * @param suggestions	Suggestions to add
+	 * @return				Current {@link DialogBuilder}
+	 */
 	public DialogBuilder addSuggestions(@NonNull List<String> suggestions) {
 		this.suggetions.addAll(suggestions);
 		return this;
 	}
 
+	/**
+	 * Adds text to the input.
+	 *
+	 * @param textView		The text
+	 * @return				Current {@link DialogBuilder}
+	 */
 	public DialogBuilder addTextView(@NonNull TextView textView) {
 		this.textView = textView;
 		return this;
 	}
 
+	/**
+	 * Adds an action, which is called once 'Okay' is clicked.
+	 *
+	 * @param onOkay		The action to perform
+	 * @return				Current {@link DialogBuilder}
+	 */
 	public DialogBuilder onOkay(@NonNull Consumer<String> onOkay) {
 		this.onOkay = onOkay;
 		return this;
 	}
 
+	/**
+	 * Shows the alert box.
+	 */
 	public void show() {
 		final AutoCompleteTextView input = new AutoCompleteTextView(context);
 		String existingValue = null;
@@ -81,12 +106,12 @@ public class DialogBuilder {
 			input.setHint((context.getString(R.string.preference_hint_course)));
 		}
 
-		ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_dropdown_item_1line,
+		final ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_dropdown_item_1line,
 				suggetions.toArray(String[]::new));
 		input.setAdapter(adapter);
 		input.setThreshold(1);
 
-		AlertDialog alert = new AlertDialog.Builder(context).setTitle(context.getString(R.string.add_preference_title))
+		final AlertDialog alert = new AlertDialog.Builder(context).setTitle(context.getString(R.string.add_preference_title))
 				.setMessage(R.string.add_preference_message).setView(input)
 				.setPositiveButton(R.string.ok, (dialog, which) -> {
 					String text = input.getText().toString().trim();

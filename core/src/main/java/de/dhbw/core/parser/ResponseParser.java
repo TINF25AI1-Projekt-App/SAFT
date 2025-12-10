@@ -28,5 +28,12 @@ import okhttp3.ResponseBody;
  */
 public interface ResponseParser<T> {
 
+	/**
+	 * Parses a request response.
+	 *
+	 * @param body			The request response
+	 * @return				Parsed result
+	 * @throws IOException	If the url was invalid
+	 */
 	T parse(@NotNull ResponseBody body) throws IOException;
 }

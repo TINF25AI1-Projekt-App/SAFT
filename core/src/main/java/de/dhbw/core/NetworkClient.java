@@ -52,6 +52,12 @@ public abstract class NetworkClient {
 	private static final OkHttpClient CLIENT = new OkHttpClient();
 	private static List<String> courses = new ArrayList<>();
 
+	/**
+	 * Fetches and caches all courses from API.
+	 *
+	 * @return 		 A {@link CompletableFuture<Void>} which is completed once
+	 * 				 the courses have been fetched.
+	 */
 	public @NotNull CompletableFuture<Void> fetchCourses() {
 		return fetch(COURSE_URL, new CourseListParser(GSON)).thenAccept(response -> {
 			courses.clear();

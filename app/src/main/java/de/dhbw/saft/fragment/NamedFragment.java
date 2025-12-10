@@ -15,10 +15,24 @@
 */
 package de.dhbw.saft.fragment;
 
+import android.widget.Toolbar;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import de.dhbw.saft.HomeActivity;
+
+/**
+ * Abstract class, representing a {@link Fragment} with a
+ * specific name. The name is displayed as a title in the
+ * {@link Toolbar} at {@link HomeActivity}
+ */
 public abstract class NamedFragment extends Fragment {
 
+	/**
+	 * Gets the name of the current Fragment.
+	 *
+	 * @return	The name
+	 */
 	public abstract @NonNull String getName();
 }

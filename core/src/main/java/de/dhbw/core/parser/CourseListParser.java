@@ -30,6 +30,9 @@ import de.dhbw.core.model.Course;
 import lombok.AllArgsConstructor;
 import okhttp3.ResponseBody;
 
+/**
+ * {@link ResponseParser} implementation used to parse Courses.
+ */
 @AllArgsConstructor
 public class CourseListParser implements ResponseParser<List<Course>> {
 

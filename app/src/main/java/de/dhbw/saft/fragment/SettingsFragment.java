@@ -63,14 +63,14 @@ public class SettingsFragment extends RecyclerFragment<SettingsCardAdapter> {
 	public List<Entry> getEntries() {
 		final SharedPreferences sharedPreferences = requireActivity()
 				.getSharedPreferences(PreferenceService.PREFERENCES_NAME, MODE_PRIVATE);
-		Map<String, ?> allPreferences = sharedPreferences.getAll();
-		List<Entry> preferences = new ArrayList<>();
-		String[] preferencesTitle = this.getResources().getStringArray(R.array.preferences_title);
-		String[] preferencesDescription = this.getResources().getStringArray(R.array.preferences_description);
+		final Map<String, ?> allPreferences = sharedPreferences.getAll();
+		final List<Entry> preferences = new ArrayList<>();
+		final String[] preferencesTitle = this.getResources().getStringArray(R.array.preferences_title);
+		final String[] preferencesDescription = this.getResources().getStringArray(R.array.preferences_description);
 
 		for (int i = 0; i < preferencesTitle.length; i++) {
-			String title = preferencesTitle[i];
-			String description = preferencesDescription[i];
+			final String title = preferencesTitle[i];
+			final String description = preferencesDescription[i];
 
 			String value = "";
 			Object prefValue = allPreferences.get(SplashScreenActivity.KEY_NAME);

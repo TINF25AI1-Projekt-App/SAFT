@@ -21,7 +21,10 @@ import java.io.IOException;
 
 import okhttp3.ResponseBody;
 
-public class DefaultParser implements de.dhbw.core.parser.ResponseParser<String> {
+/**
+ * {@link ResponseParser} implementation used to parse Strings.
+ */
+public class DefaultParser implements ResponseParser<String> {
 
 	@Override
 	public String parse(@NotNull ResponseBody body) throws IOException {
