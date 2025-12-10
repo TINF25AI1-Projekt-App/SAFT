@@ -52,8 +52,8 @@ public class HomeFragment extends NamedFragment {
 		binding = FragmentHomeBinding.inflate(inflater, container, false);
 
 		final TileBuilder builder = new TileBuilder(this);
-		builder.addWebViewTile(0, R.drawable.tile_where2go,
-				"Where2Go", "https://www.google.com/maps/d/embed?mid=1xRb0uZgr4Lsyys_mqYxPgT--4JO4OpA&ehbc=2E312F&ll=49.48905226213409%2C8.480855325064853&z=14")
+		builder.addWebViewTile(0, R.drawable.tile_where2go, "Where2Go",
+				"https://www.google.com/maps/d/embed?mid=1xRb0uZgr4Lsyys_mqYxPgT--4JO4OpA&ehbc=2E312F&ll=49.48905226213409%2C8.480855325064853&z=14")
 				.addWebViewTile(1, R.drawable.deutsche_bahn, "Navigator",
 						"https://www.fahrplan.guru/haltestelle/deutschland/baden-wuerttemberg/mannheim/neuostheim-duale-hochschule")
 				.addLinkTile(2, R.drawable.tile_moodle, "https://moodle.dhbw-mannheim.de/login/index.php")

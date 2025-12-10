@@ -24,9 +24,7 @@ import android.webkit.WebViewClient;
 
 import androidx.annotation.NonNull;
 
-import de.dhbw.saft.common.LectureFeed;
 import de.dhbw.saft.databinding.FragmentNavigatorBinding;
-import de.dhbw.saft.service.DataService;
 import lombok.Getter;
 
 /**

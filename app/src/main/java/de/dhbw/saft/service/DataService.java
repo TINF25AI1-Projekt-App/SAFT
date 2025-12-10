@@ -47,7 +47,8 @@ public class DataService extends NetworkClient {
 	private static List<Lecture> lectures = new ArrayList<>();
 	private static List<Menu> menus = new ArrayList<>();
 
-	private DataService() {}
+	private DataService() {
+	}
 
 	public static DataService getInstance() {
 		return INSTANCE;

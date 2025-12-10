@@ -42,7 +42,8 @@ public class SettingsCardAdapter extends CardAdapter<SettingsCardAdapter.CardVie
 	private final PreferenceService preferenceService;
 	private final Context context;
 
-	public SettingsCardAdapter(@NonNull List<Entry> items, @NonNull PreferenceService preferenceService, @NonNull Context context) {
+	public SettingsCardAdapter(@NonNull List<Entry> items, @NonNull PreferenceService preferenceService,
+			@NonNull Context context) {
 		super(items);
 		this.preferenceService = preferenceService;
 		this.context = context;

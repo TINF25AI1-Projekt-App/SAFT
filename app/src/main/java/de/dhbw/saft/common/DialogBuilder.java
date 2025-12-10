@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import de.dhbw.saft.HomeActivity;
 import de.dhbw.saft.R;
 import de.dhbw.saft.service.PreferenceService;
 
@@ -111,9 +110,9 @@ public class DialogBuilder {
 		input.setAdapter(adapter);
 		input.setThreshold(1);
 
-		final AlertDialog alert = new AlertDialog.Builder(context).setTitle(context.getString(R.string.add_preference_title))
-				.setMessage(R.string.add_preference_message).setView(input)
-				.setPositiveButton(R.string.ok, (dialog, which) -> {
+		final AlertDialog alert = new AlertDialog.Builder(context)
+				.setTitle(context.getString(R.string.add_preference_title)).setMessage(R.string.add_preference_message)
+				.setView(input).setPositiveButton(R.string.ok, (dialog, which) -> {
 					String text = input.getText().toString().trim();
 					if (!text.isEmpty()) {
 						for (Map.Entry<String, String> entry : inputMap.entrySet()) {
