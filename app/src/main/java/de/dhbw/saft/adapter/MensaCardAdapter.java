@@ -64,8 +64,7 @@ public class MensaCardAdapter extends CardAdapter<MensaCardAdapter.CardViewHolde
 			return;
 		}
 
-		final DataService service = new DataService();
-		service.fetchImage(image).thenAccept(bitmap -> {
+		DataService.getInstance().fetchImage(image).thenAccept(bitmap -> {
 			if (bitmap == null) {
 				imageView.post(() -> imageView.setImageResource(R.drawable.food_default));
 				return;

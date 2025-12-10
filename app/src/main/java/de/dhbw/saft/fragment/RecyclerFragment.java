@@ -21,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,7 +35,7 @@ import de.dhbw.saft.common.Entry;
  * Abstract fragment that provides a reusable pattern for displaying
  * lists of {@link Entry} items inside a {@link RecyclerView}.
  */
-public abstract class RecyclerFragment<T extends CardAdapter<?, ?>> extends Fragment {
+public abstract class RecyclerFragment<T extends CardAdapter<?, ?>> extends NamedFragment {
 
 	public abstract @NonNull List<Entry> getEntries();
 	public abstract @NonNull T getCardAdapter(@NonNull List<Entry> entries);

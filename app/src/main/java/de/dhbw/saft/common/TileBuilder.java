@@ -91,10 +91,10 @@ public class TileBuilder {
 		return addTile(titleIndex, iconResourceId, onClickAction);
 	}
 
-	public TileBuilder addWebViewTile(int titleIndex, int iconResourceId, @NonNull String link) {
+	public TileBuilder addWebViewTile(int titleIndex, int iconResourceId, String title, @NonNull String link) {
 		Consumer<View> onClickAction = view -> {
 			if (activity instanceof HomeActivity) {
-				((HomeActivity) activity).loadFragment(new NavigatorFragment(link));
+				((HomeActivity) activity).loadFragment(new NavigatorFragment(title, link));
 			}
 		};
 		return addTile(titleIndex, iconResourceId, onClickAction);

@@ -19,7 +19,6 @@ import android.graphics.Bitmap;
 
 import androidx.annotation.NonNull;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -33,7 +32,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import de.dhbw.core.NetworkClient;
-import de.dhbw.core.parser.DefaultParser;
 import de.dhbw.saft.BuildConfig;
 import de.dhbw.saft.model.Menu;
 import de.dhbw.saft.model.Lecture;
@@ -44,9 +42,17 @@ import de.dhbw.saft.parser.BitmapParser;
  */
 public class DataService extends NetworkClient {
 
-	private static List<Lecture> LECTURES = new ArrayList<>();
-	private static List<Menu> MENUS = new ArrayList<>();
-	private static final Gson GSON = new Gson();
+	private static final DataService INSTANCE = new DataService();
+
+	private static List<Lecture> lectures = new ArrayList<>();
+	private static List<Menu> menus = new ArrayList<>();
+
+	private DataService() {
+	}
+
+	public static DataService getInstance() {
+		return INSTANCE;
+	}
 
 	@NonNull
 	@Override
@@ -70,14 +76,14 @@ public class DataService extends NetworkClient {
 	public CompletableFuture<Void> fetchLectures(@NonNull String course) {
 		final String url = MessageFormat.format(LECTURE_URL, course);
 		try {
-			return fetch(url, new DefaultParser()).thenAccept(json -> {
+			return fetch(url, DEFAULT_PARSER).thenAccept(json -> {
 				if (json == null || json.isEmpty()) {
 					return;
 				}
 
-				LECTURES.clear();
+				lectures.clear();
 				Lecture[] plan = GSON.fromJson(json, Lecture[].class);
-				LECTURES.addAll(Arrays.asList(plan));
+				lectures.addAll(Arrays.asList(plan));
 			});
 		} catch (IllegalArgumentException exception) {
 			return CompletableFuture.completedFuture(null);
@@ -91,7 +97,7 @@ public class DataService extends NetworkClient {
 	 */
 	public CompletableFuture<Void> fetchMenus() {
 		try {
-			return fetch(MENU_URL, new DefaultParser()).thenAccept(json -> {
+			return fetch(MENU_URL, DEFAULT_PARSER).thenAccept(json -> {
 				if (json == null || json.isEmpty()) {
 					return;
 				}
@@ -103,9 +109,9 @@ public class DataService extends NetworkClient {
 					return;
 				}
 
-				MENUS.clear();
+				menus.clear();
 				Menu[] menuArray = GSON.fromJson(menusArray, Menu[].class);
-				MENUS.addAll(Arrays.asList(menuArray));
+				menus.addAll(Arrays.asList(menuArray));
 			});
 		} catch (IllegalArgumentException exception) {
 			return CompletableFuture.completedFuture(null);
@@ -128,7 +134,7 @@ public class DataService extends NetworkClient {
 	 * @return Unmodifiable list of lectures
 	 */
 	public static List<Lecture> getLectures() {
-		return Collections.unmodifiableList(LECTURES);
+		return Collections.unmodifiableList(lectures);
 	}
 
 	/**
@@ -137,6 +143,6 @@ public class DataService extends NetworkClient {
 	 * @return Unmodifiable list of menus
 	 */
 	public static List<Menu> getMenus() {
-		return Collections.unmodifiableList(MENUS);
+		return Collections.unmodifiableList(menus);
 	}
 }

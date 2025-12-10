@@ -66,4 +66,10 @@ public class LectureFragment extends RecyclerFragment<LectureCardAdapter> {
 	public int getLayoutResource() {
 		return R.layout.fragment_planner;
 	}
+
+	@NonNull
+	@Override
+	public String getName() {
+		return "Vorlesungen";
+	}
 }

@@ -13,6 +13,10 @@ java {
 
 dependencies {
     implementation(libs.okhttp)
+    implementation(libs.gson)
+
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
 }
 
 tasks {

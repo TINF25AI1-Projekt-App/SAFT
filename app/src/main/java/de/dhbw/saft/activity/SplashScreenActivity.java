@@ -19,19 +19,17 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.core.splashscreen.SplashScreenViewProvider;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import de.dhbw.saft.HomeActivity;
 import de.dhbw.saft.R;
-import de.dhbw.saft.common.AddPreferenceDialog;
-import de.dhbw.saft.common.SharedPreferencesManager;
+import de.dhbw.saft.common.DialogBuilder;
+import de.dhbw.saft.service.PreferenceService;
 import de.dhbw.saft.service.DataService;
 
 /**
@@ -41,8 +39,7 @@ import de.dhbw.saft.service.DataService;
 @SuppressLint("CustomSplashScreen")
 public class SplashScreenActivity extends AppCompatActivity {
 
-	public static final String PREFS_NAME = "settings_prefs";
-	public static final String KEY_NAME = "kurs";
+	public static final String KEY_NAME = "selected_course";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,33 +49,25 @@ public class SplashScreenActivity extends AppCompatActivity {
 		splashScreen.setOnExitAnimationListener(SplashScreenViewProvider::remove);
 		setContentView(R.layout.activity_splash);
 
-		// TODO: Use selected Course. If none is selected, don't fetch
-		SharedPreferencesManager prefsManager = SharedPreferencesManager.getInstance(this, PREFS_NAME);
-		String value = prefsManager.getString(KEY_NAME, null);
-		if (value == null || value.trim().isEmpty()) {
-			AddPreferenceDialog dialog = getAddPreferenceDialog(prefsManager);
-			dialog.show();
-		} else
-			launchDataservice(value);
-	}
+		final DataService dataService = DataService.getInstance();
 
-	@NonNull
-	private AddPreferenceDialog getAddPreferenceDialog(SharedPreferencesManager prefsManager) {
-		Map<String, String> keyValueMap = new HashMap<>();
-		keyValueMap.put(KEY_NAME, "${INPUT}");
-
-		String[] suggestions = {"MA-TINF25AI1", "Suggestion 2", "Suggestion 3"};
-		AddPreferenceDialog dialog = new AddPreferenceDialog(this, prefsManager, keyValueMap, suggestions, null,
-				KEY_NAME);
-		dialog.setOnPreferenceSavedListener(this::launchDataservice);
-		return dialog;
-	}
-
-	private void launchDataservice(String value) {
-		final DataService service = new DataService();
-		CompletableFuture.allOf(service.fetchLectures(value), service.fetchMenus()).thenRun(() -> {
-			startActivity(new Intent(this, HomeActivity.class));
-			finish();
+		final PreferenceService preferenceService = new PreferenceService(this);
+		final String value = preferenceService.getString(KEY_NAME, null);
+		dataService.fetchCourses().thenRun(() -> {
+			if (value == null || value.trim().isEmpty()) {
+				runOnUiThread(() -> new DialogBuilder(this, preferenceService, Map.of(KEY_NAME, "${INPUT}"))
+						.addSuggestions(DataService.getCourses()).onOkay(course -> fetch(dataService, course)).show());
+			} else {
+				fetch(dataService, value);
+			}
 		});
+	}
+
+	private void fetch(DataService dataService, String course) {
+		CompletableFuture.allOf(dataService.fetchLectures(course), dataService.fetchMenus())
+				.thenRun(() -> runOnUiThread(() -> {
+					startActivity(new Intent(this, HomeActivity.class));
+					finish();
+				}));
 	}
 }

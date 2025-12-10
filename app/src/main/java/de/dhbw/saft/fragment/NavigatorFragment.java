@@ -36,14 +36,16 @@ import lombok.Getter;
  * and derives a {@link LectureFeed} containing all information required for
  * the header card on the home screen.
  */
-public class NavigatorFragment extends Fragment {
+public class NavigatorFragment extends NamedFragment {
 
 	@Getter
 	private FragmentNavigatorBinding binding;
 
+	private String name;
 	private String link;
 
-	public NavigatorFragment(String link) {
+	public NavigatorFragment(String name, String link) {
+		this.name = name;
 		this.link = link;
 	}
 
@@ -72,4 +74,9 @@ public class NavigatorFragment extends Fragment {
 		binding = null;
 	}
 
+	@NonNull
+	@Override
+	public String getName() {
+		return name;
+	}
 }

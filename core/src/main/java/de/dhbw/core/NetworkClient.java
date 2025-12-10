@@ -15,11 +15,19 @@
 */
 package de.dhbw.core;
 
+import com.google.gson.Gson;
+
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 
+import de.dhbw.core.model.Course;
+import de.dhbw.core.parser.CourseListParser;
+import de.dhbw.core.parser.DefaultParser;
 import de.dhbw.core.parser.ResponseParser;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -35,10 +43,21 @@ public abstract class NetworkClient {
 	protected abstract @NotNull String getEndpoint();
 
 	protected final String LECTURE_URL = getEndpoint() + "/rapla/lectures/{0}/events";
-	protected final String COURSE_URL = getEndpoint() + "courses/MA/mapped";
+	protected final String COURSE_URL = getEndpoint() + "/courses/MA/mapped";
 	protected final String MENU_URL = getEndpoint() + "/mensa/MA";
 
+	protected static final DefaultParser DEFAULT_PARSER = new DefaultParser();
+	protected static final Gson GSON = new Gson();
+
 	private static final OkHttpClient CLIENT = new OkHttpClient();
+	private static List<String> courses = new ArrayList<>();
+
+	public @NotNull CompletableFuture<Void> fetchCourses() {
+		return fetch(COURSE_URL, new CourseListParser(GSON)).thenAccept(response -> {
+			courses.clear();
+			courses.addAll(response.stream().map(Course::name).toList());
+		});
+	}
 
 	/**
      * Requests a JSON response from a given url.
@@ -66,5 +85,9 @@ public abstract class NetworkClient {
 				return null;
 			}
 		}, getExecutor());
+	}
+
+	public static List<String> getCourses() {
+		return Collections.unmodifiableList(courses);
 	}
 }

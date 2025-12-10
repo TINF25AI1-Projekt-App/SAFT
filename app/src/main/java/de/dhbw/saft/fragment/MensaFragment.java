@@ -71,4 +71,10 @@ public class MensaFragment extends RecyclerFragment<MensaCardAdapter> {
 	public int getLayoutResource() {
 		return R.layout.fragment_mensa;
 	}
+
+	@NonNull
+	@Override
+	public String getName() {
+		return "Mensa";
+	}
 }
