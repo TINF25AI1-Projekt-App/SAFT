@@ -42,6 +42,7 @@ import de.dhbw.saft.HomeActivity;
 import de.dhbw.saft.R;
 import de.dhbw.saft.databinding.FragmentHomeBinding;
 import de.dhbw.saft.fragment.HomeFragment;
+import de.dhbw.saft.fragment.NavigatorFragment;
 
 /**
  * Utility class for dynamically creating clickable tiles in the
@@ -76,17 +77,26 @@ public class TileBuilder {
 	 * @return 					The used builder
 	 */
 	public TileBuilder addTile(int titleIndex, int iconResourceId, @NonNull String link) {
-		Consumer<View> onClickAction = view -> {
-			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
-			Intent chooser = Intent.createChooser(intent, fragment.getString(R.string.title_browser_chooser));
+		Consumer<View> onClickAction;
+		if (titleIndex == 1) {
+			onClickAction = view -> {
+				if (activity instanceof HomeActivity) {
+					((HomeActivity) activity).loadFragment(new NavigatorFragment());
+				}
+			};
+		} else {
+			onClickAction = view -> {
+				Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+				Intent chooser = Intent.createChooser(intent, fragment.getString(R.string.title_browser_chooser));
 
-			if (chooser.resolveActivity(activity.getPackageManager()) != null) {
-				activity.startActivity(chooser);
-				return;
-			}
+				if (chooser.resolveActivity(activity.getPackageManager()) != null) {
+					activity.startActivity(chooser);
+					return;
+				}
 
-			Toast.makeText(activity, R.string.error_text_no_app_found_chooser, Toast.LENGTH_SHORT).show();
-		};
+				Toast.makeText(activity, R.string.error_text_no_app_found_chooser, Toast.LENGTH_SHORT).show();
+			};
+		}
 		return addTile(titleIndex, iconResourceId, onClickAction);
 	}
 

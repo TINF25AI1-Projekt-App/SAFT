@@ -55,7 +55,7 @@ public class HomeFragment extends Fragment {
 		final TileBuilder builder = new TileBuilder(this);
 		builder.addTile(0, R.drawable.tile_where2go,
 				"https://www.google.com/maps/d/embed?mid=1xRb0uZgr4Lsyys_mqYxPgT--4JO4OpA&ehbc=2E312F&ll=49.48905226213409%2C8.480855325064853&z=14")
-				.addTile(1, R.drawable.tile_stuv, "https://stuv-mannheim.de/")
+				.addTile(1, R.drawable.tile_stuv, "")
 				.addTile(2, R.drawable.tile_moodle, "https://moodle.dhbw-mannheim.de/login/index.php")
 				.addTile(3, R.drawable.tile_zimbra, "https://studgate.dhbw-mannheim.de/");
 

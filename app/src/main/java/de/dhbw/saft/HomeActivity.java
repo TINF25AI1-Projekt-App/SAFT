@@ -149,7 +149,7 @@ public class HomeActivity extends AppCompatActivity {
 	 *
 	 * @param fragment the fragment to display
 	 */
-	private void loadFragment(Fragment fragment) {
+	public void loadFragment(Fragment fragment) {
 		Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
 
 		if (currentFragment != null && currentFragment.getClass() == fragment.getClass())
