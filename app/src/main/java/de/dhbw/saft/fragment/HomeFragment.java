@@ -53,11 +53,12 @@ public class HomeFragment extends Fragment {
 		binding = FragmentHomeBinding.inflate(inflater, container, false);
 
 		final TileBuilder builder = new TileBuilder(this);
-		builder.addTile(0, R.drawable.tile_where2go,
+		builder.addLinkTile(0, R.drawable.tile_where2go,
 				"https://www.google.com/maps/d/embed?mid=1xRb0uZgr4Lsyys_mqYxPgT--4JO4OpA&ehbc=2E312F&ll=49.48905226213409%2C8.480855325064853&z=14")
-				.addTile(1, R.drawable.tile_stuv, "")
-				.addTile(2, R.drawable.tile_moodle, "https://moodle.dhbw-mannheim.de/login/index.php")
-				.addTile(3, R.drawable.tile_zimbra, "https://studgate.dhbw-mannheim.de/");
+				.addWebViewTile(1, R.drawable.deutsche_bahn,
+						"https://www.fahrplan.guru/haltestelle/deutschland/baden-wuerttemberg/mannheim/neuostheim-duale-hochschule")
+				.addLinkTile(2, R.drawable.tile_moodle, "https://moodle.dhbw-mannheim.de/login/index.php")
+				.addLinkTile(3, R.drawable.tile_zimbra, "https://studgate.dhbw-mannheim.de/");
 
 		final LectureFeed feed = getLectureFeed();
 		binding.cardViewHeader.setText(feed.header());

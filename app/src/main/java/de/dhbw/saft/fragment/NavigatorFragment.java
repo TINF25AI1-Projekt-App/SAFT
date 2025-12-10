@@ -41,6 +41,12 @@ public class NavigatorFragment extends Fragment {
 	@Getter
 	private FragmentNavigatorBinding binding;
 
+	private String link;
+
+	public NavigatorFragment(String link) {
+		this.link = link;
+	}
+
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		binding = FragmentNavigatorBinding.inflate(inflater, container, false);
@@ -55,7 +61,7 @@ public class NavigatorFragment extends Fragment {
 		settings.setDomStorageEnabled(true);
 
 		binding.webviewNavigator.setWebViewClient(new WebViewClient());
-		binding.webviewNavigator.loadUrl("https://www.bahn.de");
+		binding.webviewNavigator.loadUrl(link);
 
 		return binding.getRoot();
 	}
