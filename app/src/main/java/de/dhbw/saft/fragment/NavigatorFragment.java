@@ -23,7 +23,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebViewClient;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 
 import de.dhbw.saft.common.LectureFeed;
 import de.dhbw.saft.databinding.FragmentNavigatorBinding;
