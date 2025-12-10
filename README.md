@@ -1,5 +1,5 @@
-<h3 style="text-align: center;">SAFT</h3>
-<p style="text-align: center;">Student • Anxiety and • Fear • Treatment<p>
+### SAFT
+Student • Anxiety and • Fear • Treatment
 
 ---
 
@@ -25,3 +25,15 @@ The repository remains available for reference and educational purposes.
         <td><img src="assets/planner.png" width="250" alt="planner"></td>
     </tr>
 </table>
+
+### Build the project yourself
+```bash
+# Clone repository
+git clone https://github.com/TINF25AI1-Projekt-App/SAFT.git
+cd <repository-folder>
+
+# Build all modules
+./gradlew clean build
+
+# Generate the release APK
+./gradlew assembleRelease
