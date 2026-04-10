@@ -65,7 +65,7 @@ public class SettingsCardAdapter extends CardAdapter<SettingsCardAdapter.CardVie
 		holder.description.setText(item.description());
 		holder.value.setText(item.value());
 		holder.cardView.setOnClickListener(view -> {
-			new DialogBuilder(context, preferenceService, Map.of(SplashScreenActivity.KEY_NAME, "${INPUT}"))
+			new DialogBuilder(context, preferenceService, Map.of(SplashScreenActivity.KEY_COURSE, "${INPUT}"))
 					.addSuggestions(DataService.getCourses()).addTextView(holder.value)
 					.onOkay(course -> DataService.getInstance().fetchLectures(course)).show();
 		});

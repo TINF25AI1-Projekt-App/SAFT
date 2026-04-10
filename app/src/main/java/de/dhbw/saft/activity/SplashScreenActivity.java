@@ -40,7 +40,7 @@ import de.dhbw.saft.service.DataService;
 @SuppressLint("CustomSplashScreen")
 public class SplashScreenActivity extends AppCompatActivity {
 
-	public static final String KEY_NAME = "selected_course";
+	public static final String KEY_COURSE = "selected_course";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +53,10 @@ public class SplashScreenActivity extends AppCompatActivity {
 		final DataService dataService = DataService.getInstance();
 
 		final PreferenceService preferenceService = new PreferenceService(this);
-		final String value = preferenceService.getString(KEY_NAME, null);
+		final String value = preferenceService.getString(KEY_COURSE, null);
 		dataService.fetchCourses().thenRun(() -> {
 			if (value == null || value.trim().isEmpty()) {
-				runOnUiThread(() -> new DialogBuilder(this, preferenceService, Map.of(KEY_NAME, "${INPUT}"))
+				runOnUiThread(() -> new DialogBuilder(this, preferenceService, Map.of(KEY_COURSE, "${INPUT}"))
 						.addSuggestions(DataService.getCourses()).onOkay(course -> fetch(dataService, course)).show());
 			} else {
 				fetch(dataService, value);
@@ -72,7 +72,8 @@ public class SplashScreenActivity extends AppCompatActivity {
 	 * @param course		Course to fetch lectures for
 	 */
 	private void fetch(@NonNull DataService dataService, @NonNull String course) {
-		CompletableFuture.allOf(dataService.fetchLectures(course), dataService.fetchMenus())
+		CompletableFuture
+				.allOf(dataService.fetchEvents(course), dataService.fetchLectures(course), dataService.fetchMenus())
 				.thenRun(() -> runOnUiThread(() -> {
 					startActivity(new Intent(this, HomeActivity.class));
 					finish();

@@ -73,7 +73,7 @@ public class SettingsFragment extends RecyclerFragment<SettingsCardAdapter> {
 			final String description = preferencesDescription[i];
 
 			String value = "";
-			Object prefValue = allPreferences.get(SplashScreenActivity.KEY_NAME);
+			Object prefValue = allPreferences.get(SplashScreenActivity.KEY_COURSE);
 			if (prefValue instanceof String preference) {
 				value = preference;
 			}
