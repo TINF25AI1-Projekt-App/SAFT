@@ -27,7 +27,6 @@ import java.util.concurrent.ExecutorService;
 
 import de.dhbw.core.model.Course;
 import de.dhbw.core.parser.CourseListParser;
-import de.dhbw.core.parser.DefaultParser;
 import de.dhbw.core.parser.ResponseParser;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
