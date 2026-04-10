@@ -15,6 +15,7 @@
 */
 package de.dhbw.saft.adapter;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -50,11 +51,21 @@ public class LectureCardAdapter extends CardAdapter<LectureCardAdapter.CardViewH
 
 	@Override
 	public void bindCardHolder(CardViewHolder holder, Lecture item) {
+		if (hasNullField(item)) return;
 		holder.textLectureTitle.setText(item.name());
 		holder.textPlannerTime.setText(Formatter.formatTime(item.start()) + " - " + Formatter.formatTime(item.end()));
 		holder.textPlannerRooms.setText(String.join(", ", item.rooms()));
 		holder.imageViewType.setImageResource(
 				item.type() == Lecture.Type.PRESENCE ? R.drawable.planner_room : R.drawable.planner_online);
+	}
+
+	private boolean hasNullField(Lecture item){
+		if (item.name() == null ||
+				item.type() == null ||
+				item.rooms() == null ||
+				item.start() == null ||
+				item.end() == null) return true;
+		return false;
 	}
 
 	public static class CardViewHolder extends RecyclerView.ViewHolder {
