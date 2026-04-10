@@ -46,8 +46,7 @@ public abstract class NetworkClient {
 	protected final String COURSE_URL = getEndpoint() + "/courses/MA/mapped";
 	protected final String MENU_URL = getEndpoint() + "/mensa/MA";
 
-	protected static final DefaultParser DEFAULT_PARSER = new DefaultParser();
-	protected static final Gson GSON = new Gson();
+	public static final Gson GSON = new Gson();
 
 	private static final OkHttpClient CLIENT = new OkHttpClient();
 	private static List<String> courses = new ArrayList<>();

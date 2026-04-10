@@ -1,4 +1,4 @@
-name: Release Core Module
+name: Release APK
 
 on:
   workflow_dispatch:
@@ -20,13 +20,13 @@ jobs:
       - name: Set tag name
         run: echo "TAG_NAME=1.0.${{ github.run_number }}" >> $GITHUB_ENV
 
-      - name: Build core shadowJar
-        run: ./gradlew :core:clean :core:shadowJar --no-daemon
+      - name: Build APK
+        run: ./gradlew :app:clean :app:assembleRelease --no-daemon
 
       - name: Grab output
-        id: jar
+        id: apk
         run: |
-          FILE=$(ls core/build/libs/SAFT-*-core.jar | head -n 1)
+          FILE=$(ls app/build/outputs/apk/release/*.apk | head -n 1)
           echo "file=$FILE" >> $GITHUB_OUTPUT
 
       - name: Create tag
@@ -40,6 +40,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.TAG_NAME }}
-          files: ${{ steps.jar.outputs.file }}
+          files: ${{ steps.apk.outputs.file }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

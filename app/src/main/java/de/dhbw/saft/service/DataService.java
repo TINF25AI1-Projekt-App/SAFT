@@ -19,12 +19,8 @@ import android.graphics.Bitmap;
 
 import androidx.annotation.NonNull;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -33,9 +29,13 @@ import java.util.concurrent.Executors;
 
 import de.dhbw.core.NetworkClient;
 import de.dhbw.saft.BuildConfig;
+import de.dhbw.saft.model.Event;
 import de.dhbw.saft.model.Menu;
 import de.dhbw.saft.model.Lecture;
 import de.dhbw.saft.parser.BitmapParser;
+import de.dhbw.saft.parser.EventParser;
+import de.dhbw.saft.parser.LectureParser;
+import de.dhbw.saft.parser.MenuParser;
 
 /**
  * Service class responsible for loading and caching data from API.
@@ -44,6 +44,7 @@ public class DataService extends NetworkClient {
 
 	private static final DataService INSTANCE = new DataService();
 
+	private static List<Event> events = new ArrayList<>();
 	private static List<Lecture> lectures = new ArrayList<>();
 	private static List<Menu> menus = new ArrayList<>();
 
@@ -67,6 +68,22 @@ public class DataService extends NetworkClient {
 	}
 
 	/**
+	 * Fetches and caches all events from API.
+	 *
+	 * @param course The course to fetch the lectures for
+	 * @return 		 A {@link CompletableFuture<Void>} which is completed once
+	 * 				 the events have been fetched.
+	 */
+	public CompletableFuture<Void> fetchEvents(@NonNull String course) {
+		final String url = MessageFormat.format(LECTURE_URL, course);
+		try {
+			return fetch(url, new EventParser()).thenAccept(events -> DataService.events = events);
+		} catch (IllegalArgumentException exception) {
+			return CompletableFuture.completedFuture(null);
+		}
+	}
+
+	/**
 	 * Fetches and caches all lectures from API.
 	 *
 	 * @param course The course to fetch the lectures for
@@ -76,15 +93,7 @@ public class DataService extends NetworkClient {
 	public CompletableFuture<Void> fetchLectures(@NonNull String course) {
 		final String url = MessageFormat.format(LECTURE_URL, course);
 		try {
-			return fetch(url, DEFAULT_PARSER).thenAccept(json -> {
-				if (json == null || json.isEmpty()) {
-					return;
-				}
-
-				lectures.clear();
-				Lecture[] plan = GSON.fromJson(json, Lecture[].class);
-				lectures.addAll(Arrays.asList(plan));
-			});
+			return fetch(url, new LectureParser()).thenAccept(lectures -> DataService.lectures = lectures);
 		} catch (IllegalArgumentException exception) {
 			return CompletableFuture.completedFuture(null);
 		}
@@ -97,22 +106,7 @@ public class DataService extends NetworkClient {
 	 */
 	public CompletableFuture<Void> fetchMenus() {
 		try {
-			return fetch(MENU_URL, DEFAULT_PARSER).thenAccept(json -> {
-				if (json == null || json.isEmpty()) {
-					return;
-				}
-
-				JsonArray root = GSON.fromJson(json, JsonArray.class);
-				JsonObject object = root.get(0).getAsJsonObject();
-				JsonArray menusArray = object.getAsJsonArray("menus");
-				if (menusArray == null) {
-					return;
-				}
-
-				menus.clear();
-				Menu[] menuArray = GSON.fromJson(menusArray, Menu[].class);
-				menus.addAll(Arrays.asList(menuArray));
-			});
+			return fetch(MENU_URL, new MenuParser()).thenAccept(menus -> DataService.menus = menus);
 		} catch (IllegalArgumentException exception) {
 			return CompletableFuture.completedFuture(null);
 		}
@@ -126,6 +120,15 @@ public class DataService extends NetworkClient {
 	 */
 	public CompletableFuture<Bitmap> fetchImage(@NonNull String url) {
 		return fetch(url, new BitmapParser());
+	}
+
+	/**
+	 * Returns an unmodifiable list of all cached events.
+	 *
+	 * @return Unmodifiable list of events
+	 */
+	public static List<Event> getEvents() {
+		return Collections.unmodifiableList(events);
 	}
 
 	/**

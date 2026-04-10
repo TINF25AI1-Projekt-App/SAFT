@@ -43,12 +43,43 @@ public class PreferenceService {
 	}
 
 	/**
-	 * Stores a preference value.
+	 * Gets the preference value as int.
+	 *
+	 * @param key			Key to the preference value
+	 * @return				Preference as String or 0
+	 */
+	public int getInt(String key) {
+		return getInt(key, 0);
+	}
+
+	/**
+	 * Gets the preference value as int.
+	 *
+	 * @param key			Key to the preference value
+	 * @param defaultValue	Value to return if the preference is not found
+	 * @return				Preference as int or defaultValue
+	 */
+	public int getInt(String key, int defaultValue) {
+		return preferences.getInt(key, defaultValue);
+	}
+
+	/**
+	 * Stores a String preference value.
 	 *
 	 * @param key		Key to the preference value
 	 * @param value		Value to store
 	 */
 	public void putString(String key, String value) {
 		preferences.edit().putString(key, value).apply();
+	}
+
+	/**
+	 * Stores a int preference value.
+	 *
+	 * @param key		Key to the preference value
+	 * @param value		Value to store
+	 */
+	public void putInt(String key, int value) {
+		preferences.edit().putInt(key, value).apply();
 	}
 }
